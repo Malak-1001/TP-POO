@@ -1,0 +1,1 @@
+public abstract class capteur_num extends capteur{}

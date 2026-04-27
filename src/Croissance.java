@@ -1,0 +1,6 @@
+
+
+public enum Croissance
+{
+    SEMI,GERMINATION,CROISSANCE,MATURITE,RECOLTE
+}
