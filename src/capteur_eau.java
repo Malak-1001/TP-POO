@@ -1,6 +1,7 @@
 public class capteur_eau extends capteur_num{
-private String[] temperature=new String[50];
-private String[] oxygene=new String[50];
+
+    private TypeMesure temperature = TypeMesure.TEMPERATURE;
+    private TypeMesure oxygene = TypeMesure.OXYGENE;
 
 public void afficher_relevee(){
 }

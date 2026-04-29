@@ -1,3 +1,3 @@
 public abstract class capteur_num extends capteur{
-    protected TypeMesure mesure ;
+    protected float val ; // La valeur numérique mesurée par le capteur
 }
