@@ -1,12 +1,14 @@
+import java.time.LocalDate;
 import java.util.*;
 
-public abstract class capteur implements interface_relevee_affiche,interface_activation {
+public abstract class capteur implements interface_activation {
     private static int i ; // Nombre  de capteurs
     //private Releve[] list_releve = new Releve[50];
     private List<Releve> Liste ;
     private int id;
-    private Zone_geographique zone;
+    protected Zone_geographique zone;
     private StatusCapteur statue;
+    protected Type_Capteurs type;
     
 
     /**
@@ -34,11 +36,6 @@ public abstract class capteur implements interface_relevee_affiche,interface_act
         this.Liste = new ArrayList<>();
     }
 
-    
-
-    // Une méthode qui s'occupe de l'affichage des relevés
-    public void afficher_relevee(){
-    }
     
     /**
      * S'occupe de l'activation du capteur
@@ -69,14 +66,7 @@ public abstract class capteur implements interface_relevee_affiche,interface_act
         Liste.add(r);
     }
 
-    /**
-     * Retourne le dernier releve de la liste de relevé du capteur en question 
-     * @return
-     */
-    public Releve getReleve (){
-        return Liste.getLast();
-    }
-
+    
     /**
      * Retourne le releve ayant le meme indice que celui donné
      * @param i
@@ -95,6 +85,14 @@ public abstract class capteur implements interface_relevee_affiche,interface_act
     }
 
     /**
+     * Retourne le dernier releve de la liste de relevé du capteur en question 
+     * @return
+     */
+    public Releve getReleve (){
+        return Liste.getLast();
+    }
+
+    /**
      * Retourne une string ayant toute la liste des relevés displayed
      * @return
      */
@@ -106,5 +104,25 @@ public abstract class capteur implements interface_relevee_affiche,interface_act
 
         return S.toString();
     }
+
+    /**
+     * Retourne une string de la liste de relevés filtrés par plage de dates
+     * @param d1
+     * @param d2
+     * @return
+     */
+    public String DisplayReleveFiltre (LocalDate d1, LocalDate d2) throws BeforeDateException{
+        if(d2.isBefore(d1)) throw new BeforeDateException();
+
+        StringBuilder S = new StringBuilder();
+
+        for (Releve releve : Liste) {
+            if(releve.date.isAfter(d1) && releve.date.isBefore(d2)){
+                S.append(releve.Display());
+            }
+        }
+        return S.toString();
+    }
+
 
 }

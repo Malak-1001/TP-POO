@@ -1,4 +1,4 @@
-public abstract class Zone_geographique implements interface_relevee_affiche,interface_activation{
+public abstract class Zone_geographique implements interface_activation{
 private int id;
 private String nom;
 private status_zone active;

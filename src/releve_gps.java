@@ -1,6 +1,6 @@
 public class releve_gps extends Releve{
 
-    
+    private Map<float, float> coordonnee = new
 
     /**
      * Retourne une String ayant les données du relevé numérique 

@@ -2,18 +2,19 @@
 import java.util.List;
 
 public class capteur_env extends capteur_num{
-    private final List<TypeMesure> Unites = List.of(
-        TypeMesure.TEMPERATURE,
-        TypeMesure.HUMIDITE, 
-        TypeMesure.PLUVIOMETRIE
-    );
-
+    
     /**
      * Constructeur de la classe capteur environnement
      * @param z
      */
     public capteur_env(Zone_geographique z){
         super(z);
+        super.type = Type_Capteurs.ENVIRONMENTAL;
+        super.Unites = List.of(
+        TypeMesure.TEMPERATURE,
+        TypeMesure.HUMIDITE, 
+        TypeMesure.PLUVIOMETRIE
+    );
         
     }
 
@@ -23,6 +24,12 @@ public class capteur_env extends capteur_num{
      */
     public capteur_env(Zone_geographique z, StatusCapteur c){
         super(z, c);
+        super.type = Type_Capteurs.ENVIRONMENTAL;
+        super.Unites = List.of(
+        TypeMesure.TEMPERATURE,
+        TypeMesure.HUMIDITE, 
+        TypeMesure.PLUVIOMETRIE
+    );
     }
 
     

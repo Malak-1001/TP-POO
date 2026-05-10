@@ -32,7 +32,7 @@ public class releve_num extends Releve{
         StringBuilder S = new StringBuilder();
         S.append("Releve - date :").append(super.date).append(" \n");
         S.append(" - Valeur: ").append(val).append(unite).append("\n");
-        S.append(" - Niveau de gravité: ").append(gravite);
+        S.append(" - Niveau de gravité: ").append(gravity);
 
         return S.toString() ;
     }

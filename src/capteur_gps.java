@@ -10,11 +10,13 @@ public class capteur_gps extends capteur{
      */
     public capteur_gps(Zone_geographique z) {
         super(z);
+        super.type = Type_Capteurs.GPS;
         this.coordonnee = new float [MAX][2];
     }
 
     public capteur_gps(Zone_geographique z, StatusCapteur s) {
         super(z, s);
+        super.type = Type_Capteurs.GPS;
         this.coordonnee = new float [MAX][2];
     }
 
