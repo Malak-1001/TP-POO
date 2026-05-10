@@ -1,10 +1,14 @@
+import java.util.List;
+import java.util.ArrayList;
 public class Zone_aquacole extends Zone_geographique{
 private Bassin bassin;
-private float[] poid_de_recolte=new float[50];
-private int cpt_pdr=0;
+
+private List<Float> poid_de_recolte = new ArrayList<>();
+
 private TypeMesure unite=TypeMesure.POID;
 public void afficher_relevee(){
 }
+public TypeMesure get_unite(){return unite;}
 public void activation(){this.active = status_zone.ACTIF;}
 public void suspension(){this.active = status_zone.SUSPENDU;}
 public Zone_aquacole( String nom) {
@@ -14,11 +18,24 @@ public Zone_aquacole( String nom) {
         bassin=new Bassin();
         
     }
+    public Zone_aquacole( String nom,int nbanim) {
+       
+        this.nom = nom;
+        this.active = status_zone.ACTIF;
+        bassin=new Bassin(nbanim);
+        
+    }
 public void enregistrer_rendement(float val){
-if(cpt_pdr<50){
-poid_de_recolte[cpt_pdr]=val;
-cpt_pdr=cpt_pdr+1;
-}
+
+poid_de_recolte.add(val);
+
 
 }
+public void afficher_info(){
+System.out.println(nom);
+System.out.println(active);
+System.out.println("nombre entites : ");
+System.out.println(+bassin.get_nbanimeaux());
+}
+public void ajouter_animeaux(int v){bassin.ajouter_animeaux(v);}
 }
