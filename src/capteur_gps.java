@@ -1,24 +1,32 @@
 public class capteur_gps extends capteur{
-    private float latitude = 0 ;
-    private float longitude = 0 ;
+    private final int MAX = 100 ;
+    private float[] [] coordonnee  ;
+    private int i ;
 
     /**
-     * Permets d'envoyer la latitude et la longitude dans un tableau
-     * @return la position actuelle dans le tableau de coordonnées
+     * Constructeur de la classe capteur_gps avec 
+     * @param latitude
+     * @param longitude
      */
-    public float[] EnvoiePosition(){
-        float[] coordonnee = new float [2];
-        coordonnee[0] = latitude;
-        coordonnee[1] = longitude;
-        return coordonnee;
+    public capteur_gps(Zone_geographique z) {
+        super(z);
+        this.coordonnee = new float [MAX][2];
     }
+
+    public capteur_gps(Zone_geographique z, StatusCapteur s) {
+        super(z, s);
+        this.coordonnee = new float [MAX][2];
+    }
+
 
     /**
      * Modifie la latitude
      * @param lat
      */
-    public void setLatitude( float lat){
-        this.latitude = lat;
+    public void setCoordonnee( float lat, float lon){
+        this.coordonnee[i][0] = lat ;
+        this.coordonnee[i][1] = lon ;
+        i++;
     }
 
     
@@ -26,29 +34,12 @@ public class capteur_gps extends capteur{
      * Permets de retourner la latitude enregistré par le capteur
      * @return latitude (float)
      */
-    public float getLatitude (){
-        return this.latitude;
+    public float[] getCoordonnee (){
+        float[] ActualCoord = new float[2]; 
+        ActualCoord[0] =this.coordonnee[i][0] ; //Latitude 
+        ActualCoord[1] =this.coordonnee[i][1];  //Longitude
+        return ActualCoord;
     }
 
-    /**
-     * Modifie la longitude
-     * @param lon
-     */
-    public void setLongitude( float lon){
-        this.longitude = lon;
-    }
     
-    /**
-     * Permets de retourner la longitude enregistré par le capteur
-     * @return longitude (float)
-     */
-    public float getLongitude (){
-        return this.longitude;
-    }
-
-
-    public void afficher_relevee(){
-    }
-    public void activation(){}
-    public void suspension(){}
 }
