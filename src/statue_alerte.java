@@ -2,5 +2,5 @@
 
 public enum statue_alerte
 {
-    AQUITE,SUPPRIME
+    ACTIF, AQUITTE,SUPPRIME
 }
