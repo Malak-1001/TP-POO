@@ -3,7 +3,7 @@ public class Limite_geographique
 {
     private float r;
     private float x;
-     private float y;
+    private float y;
     public float get_r(){return r;}
     public float get_x(){return x;}
     public float get_y(){return y;}
@@ -29,5 +29,11 @@ public class Limite_geographique
         lim[1]=y;
         lim[2]=r;
         return lim;
+    }
+    public Limite_geographique(float r,float x, float y){
+    this.x=x;
+    this.y=y;
+    this.r=r;
+    
     }
 }
