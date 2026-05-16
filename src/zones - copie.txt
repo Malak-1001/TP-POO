@@ -1,0 +1,16 @@
+# FORMAT DES ZONES (limites obligatoires x|y|r) :
+#   CULTURE|nom|x|y|r
+#   ELEVAGE|nom|VOLAIL ou RUMINANT|x|y|r
+#   AQUACOLE|nom|nombre_animaux|x|y|r
+
+
+CULTURE|Zone_Ble_Nord|0|0|10
+CULTURE|Zone_Legumes_Sud|50|10|12
+CULTURE|Zone_Fruits_Est|100|25|15
+ELEVAGE|Zone_Poulets_A|VOLAIL|10|60|8
+ELEVAGE|Zone_Dindes_B|VOLAIL|15|65|8
+ELEVAGE|Zone_Vaches_A|RUMINANT|80|40|20
+ELEVAGE|Zone_Moutons_B|RUMINANT|85|45|18
+AQUACOLE|Bassin_Tilapia|50|200|10|25
+AQUACOLE|Bassin_Carpes|30|220|15|20
+AQUACOLE|Bassin_Crevettes|100|240|20|30
