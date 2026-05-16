@@ -19,9 +19,11 @@ public Zone_elevage( String nom, type_elevage type) {
         this.nom = nom;
         this.active = status_zone.ACTIF;
         this.type = type;
+        this.id =cpt;
+        cpt++ ;
         if(type==type_elevage.VOLAIL){
             rendement=type_production.OEUF;
-         unite=TypeMesure.OEUF;
+         unite=TypeMesure.OEUFS;
         
         }
         if(type==type_elevage.RUMINANT){

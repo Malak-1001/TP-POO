@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public abstract class capteur implements interface_activation {
-    private static int i ; // Nombre  de capteurs
+    private static int i  ; // Nombre  de capteurs
     //private Releve[] list_releve = new Releve[50];
     private List<Releve> Liste ;
     private int id;
@@ -10,6 +10,29 @@ public abstract class capteur implements interface_activation {
     private StatusCapteur statue;
     protected Type_Capteurs type;
     
+    /**
+     * Retourne le type du capteur
+     * @return
+     */
+    public Type_Capteurs getType(){
+        return type;
+    }
+
+    /**
+     * Retourne l id du capteur 
+     * @return
+     */
+    public int getId(){
+        return id;
+    }
+
+    /**
+     * Retourne le statue du capteur
+     * @return
+     */
+    public StatusCapteur getStatut(){
+        return statue;
+    }
 
     /**
      * Initialisation du capteur avec une zone géographique, statut
@@ -98,10 +121,14 @@ public abstract class capteur implements interface_activation {
      */
     public String DisplayListReleve() {
         StringBuilder S = new StringBuilder();
+        if(Liste.size() == 0){
+            S.append("Aucun releve n'est existent pour ce capteur");
+        } else {
+            
         for (Releve releve : Liste) {
             S.append(releve.Display());
         }
-
+        }
         return S.toString();
     }
 

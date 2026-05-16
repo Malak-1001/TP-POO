@@ -5,7 +5,7 @@ private Bassin bassin;
 
 private List<Float> poid_de_recolte = new ArrayList<>();
 
-private TypeMesure unite=TypeMesure.POID;
+private TypeMesure unite=TypeMesure.POIDS;
 public void afficher_relevee(){
 }
 public TypeMesure get_unite(){return unite;}
@@ -16,11 +16,15 @@ public Zone_aquacole( String nom) {
         this.nom = nom;
         this.active = status_zone.ACTIF;
         bassin=new Bassin();
+        this.id =cpt;
+        cpt++ ;
         
     }
     public Zone_aquacole( String nom,int nbanim) {
        
         this.nom = nom;
+        this.id =cpt;
+        cpt++ ;
         this.active = status_zone.ACTIF;
         bassin=new Bassin(nbanim);
         

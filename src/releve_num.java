@@ -30,9 +30,9 @@ public class releve_num extends Releve{
     public String Display(){
         
         StringBuilder S = new StringBuilder();
-        S.append("Releve - date :").append(super.date).append(" \n");
-        S.append(" - Valeur: ").append(val).append(unite).append("\n");
-        S.append(" - Niveau de gravité: ").append(gravity);
+        S.append("\n Releve - date :").append(super.date).append(" \n");
+        S.append(" - Valeur: ").append(val).append(unite.getUnite()).append("\n");
+        S.append(" - Niveau de gravité: ").append(gravity).append(" \n");
 
         return S.toString() ;
     }

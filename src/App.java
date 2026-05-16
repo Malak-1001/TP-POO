@@ -1,341 +1,184 @@
 import java.util.Scanner;
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class test {
+public class App {
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
-        Affichage aff = new Affichage();
         Ferme ferme = new Ferme();
 
-        int choix = 0;
+        type_elevage t1 = type_elevage.RUMINANT;
+        type_elevage t2 = type_elevage.VOLAIL;
 
-        while (choix != 8) {
-            System.out.println("\n===== MENU FERME =====");
-            System.out.println("1. Ajouter une zone");
-            System.out.println("2. Modifier une zone");
-            System.out.println("3. Désactiver une zone");
-            System.out.println("4. Afficher les zones");
-            System.out.println("5. Enregistrer production");
-            System.out.println("6. mettre a jour et afficher stade de croissance dune culture");
-            System.out.println("7. rapport etat de zone");
-            System.out.println("8. Quitter");
-            System.out.print("Votre choix : ");
-            choix = scanner.nextInt();
-            scanner.nextLine();
 
-            switch (choix) {
 
-                case 1:
-                    System.out.println("Type de zone : 1.Culture  2.Elevage  3.Aquacole");
-                    int type = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Nom de la zone : ");
-                    String nom = scanner.nextLine();
+        Zone_culture Zc1 = new Zone_culture("Zc1");
+        Zone_aquacole Za1 = new Zone_aquacole("Za1");
+        Zone_elevage Ze1 = new Zone_elevage("Ze1",t1 );
+        Zone_elevage Ze2 = new Zone_elevage("Ze2", t2);
 
-                    if (type == 1) {
-                        Zone_culture zone = new Zone_culture(nom);
-                        ferme.ajouter_zone(zone);
-                        System.out.println("zone culture ajoutée ");
-
-                    } else if (type == 2) {
-                        System.out.println("Type élevage : 1.Ruminant  2.Volail");
-                        int elev = scanner.nextInt();
-                        scanner.nextLine();
-                        type_elevage te = (elev == 1) ? type_elevage.RUMINANT : type_elevage.VOLAIL;
-                        Zone_elevage zone = new Zone_elevage(nom, te);
-                        ferme.ajouter_zone(zone);
-                        System.out.println("Zone élevage ajoutée ");
-
-                    } else if (type == 3) {
-                        System.out.print("Nombre d'animaux : ");
-                        int nb = scanner.nextInt();
-                        scanner.nextLine();
-                        Zone_aquacole zone = new Zone_aquacole(nom, nb);
-                        ferme.ajouter_zone(zone);
-                        System.out.println("Zone aquacole ajoutée ");
-                    }
-                    break;
-                 case 2:
-    if (ferme.get_liste_de_zones().isEmpty()) {
-        System.out.println("Aucune zone disponible.");
-        break;
-    }
-    aff.lister_zones(ferme);
-
-    System.out.println("Type de zone à modifier :");
-    System.out.println("1. Culture");
-    System.out.println("2. Elevage");
-    System.out.println("3. Aquacole");
-    System.out.print("Votre choix : ");
-    int typeZone = scanner.nextInt();
-    scanner.nextLine();
-
-    System.out.print("Nom de la zone : ");
-    String nomZone = scanner.nextLine();
-
-    
-    Zone_geographique zoneChoisie = null;
-    
-    zoneChoisie=ferme.chercher_zone(nomZone);
-    if (zoneChoisie == null) {
-        System.out.println("Zone introuvable.");
-        break;
-    }
-
-    
-    if (typeZone == 1 && zoneChoisie instanceof Zone_culture) {
-        Zone_culture zc = (Zone_culture) zoneChoisie;
-
-        System.out.println("1. Créer une culture");
-        System.out.println("2. Ajouter une culture existante");
-        System.out.println("3. Créer et ajouter une culture");
-        System.out.print("Votre choix : ");
-        int choixCulture = scanner.nextInt();
-        scanner.nextLine();
-
-        if (choixCulture == 1 || choixCulture == 3) {
-            System.out.print("nom culture: ");
-            String nomcult = scanner.nextLine();
-            System.out.print("Date de plantation : ");
-            String datePlant = scanner.nextLine();
-            System.out.print("Date de récolte : ");
-            String dateRecolt = scanner.nextLine();
-             System.out.println("Type élevage : 1.cereales  2.fruits   3.legumes ");
-                        int clt = scanner.nextInt();
-                        scanner.nextLine();
-                        Famille_cult fc=null;
-                        if(clt==1){fc=Famille_cult.CEREAL;}
-                        if(clt==2){fc=Famille_cult.FRUIT;}
-                        if(clt==3){fc=Famille_cult.LEGUMES;}
-            System.out.print("Exigences pédologiques  : ");
-            String ex = scanner.nextLine();
-
-            Culture nouvelleCulture = new Culture(datePlant, dateRecolt, fc, ex,nomcult);
-
-            if (choixCulture == 3) {
-                zc.affecter_cultures(nouvelleCulture);
-                System.out.println("Culture créée et ajoutée !");
-            } else {
-                System.out.println("Culture créée ");
-            }
-
-        } else if (choixCulture == 2) {
-            
-            Culture c = new Culture();
-            zc.affecter_cultures(c);
-            System.out.println("Culture ajoutée ");
-        }
-
-    
-    } else if (typeZone == 2 && zoneChoisie instanceof Zone_elevage) {
-        Zone_elevage ze = (Zone_elevage) zoneChoisie;
-
-        System.out.println("1. Créer un animal");
-        System.out.println("2. Ajouter un animal existant");
-        System.out.println("3. Créer et ajouter un animal");
-        System.out.print("Votre choix : ");
-        int choixAnimal = scanner.nextInt();
-        scanner.nextLine();
-
-        if (choixAnimal == 1 || choixAnimal == 3) {
-            System.out.print("Espèce : ");
-            String espece = scanner.nextLine();
-            System.out.print("Age : ");
-            int age = scanner.nextInt();
-            System.out.print("Poids : ");
-            int poids = scanner.nextInt();
-            scanner.nextLine();
-
-            Animeaux nouvelAnimal = new Animeaux(espece, age, poids);
-
-            if (choixAnimal == 3) {
-                ze.affecter_animal(nouvelAnimal);
-                System.out.println("Animal créé et ajouté !");
-            } else {
-                System.out.println("Animal créé !");
-            }
-
-        } else if (choixAnimal == 2) {
-            System.out.print("Espèce : ");
-            String espece = scanner.nextLine();
-            System.out.print("Age : ");
-            int age = scanner.nextInt();
-            System.out.print("Poids : ");
-            int poids = scanner.nextInt();
-            scanner.nextLine();
-            ze.affecter_animal(espece, age, poids);
-            System.out.println("Animal ajouté !");
-        }
-
-    
-    } else if (typeZone == 3 && zoneChoisie instanceof Zone_aquacole) {
-        Zone_aquacole za = (Zone_aquacole) zoneChoisie;
-
-        System.out.print("Nombre d'espaces à ajouter : ");
-        int espaces = scanner.nextInt();
-        za.ajouter_animeaux(espaces);
         
 
-    } else {
-        System.out.println("Type de zone incompatible avec la zone choisie.");
-    }
-    break;
+        Famille_cult famille = Famille_cult.CEREAL;
+        Exigences_pedologiques e = new Exigences_pedologiques("exigences pédologiques");
 
-                case 3:
-                    if (ferme.get_liste_de_zones().isEmpty()) {
-                        System.out.println("Aucune zone disponible.");
-                        break;
-                    }
-                    aff.lister_zones(ferme);
-                     System.out.print("nom de la zone a suspendre : ");
-                    String nom1 = scanner.nextLine();
-                    ferme.suspension_zone(nom1);
-                    System.out.println("Zone désactivée !");
-                    break;
+        Culture c = new Culture("12/05/2026", "30/05/2026", famille, e, "Cult1");
+        
+        Zc1.affecter_cultures(c);
+        System.out.println("------------------------------------------------------------");
+        Zc1.afficher_info();
+        
+        Croissance r = Croissance.GERMINATION;
+        c.mettre_a_jour_croissance(r);
+        Zc1.afficher_cultures();
 
-                case 4:
-                    if (ferme.get_liste_de_zones().isEmpty()) {
-                        System.out.println("Aucune zone disponible.");
-                        break;
-                    }
-                    aff.afficher_zones(ferme);
-                    break;
-              case 5:
-    if (ferme.get_liste_de_zones().isEmpty()) {
-        System.out.println("Aucune zone disponible.");
-        break;
-    }
-    aff.lister_zones(ferme);
+        System.out.println("------------------------------------------------------------");
 
-    System.out.println("Type de zone  :");
-    System.out.println("1. Culture");
-    System.out.println("2. Elevage");
-    System.out.println("3. Aquacole");
-    System.out.print("Votre choix : ");
-    int typeZone1 = scanner.nextInt();
-    scanner.nextLine();
+        Za1.ajouter_animeaux(12);
+        Za1.afficher_info();
 
-    System.out.print("Nom de la zone : ");
-    String nomZone1 = scanner.nextLine();
+        System.out.println("------------------------------------------------------------");
 
-    
-    Zone_geographique zoneChoisie1 = null;
-    
-    zoneChoisie1=ferme.chercher_zone(nomZone1);
-    if (zoneChoisie1 == null) {
-        System.out.println("Zone introuvable.");
-        break;
-    }
+        sante s = sante.QUARANTAINE ;
+        Animeaux a1 = new Animeaux("Vaches", 3, 10);
+        Animeaux a2 = new Animeaux("Poules", 4, 3, s);
+        Animeaux a3 = new Animeaux("Moutons", 3, 10);
 
-    
-    if (typeZone1 == 1 && zoneChoisie1 instanceof Zone_culture) {
-        Zone_culture zc = (Zone_culture) zoneChoisie1;
-        System.out.print("type de rendement  : ");
-        String tr = scanner.nextLine();
-        System.out.print("valeur du rendement  : ");
-        int val=scanner.nextInt();
-        zc.enregistrer_rendement_culture(tr, val);
-    }
+        Ze1.affecter_animal(a1);
+        Ze2.affecter_animal(a2);
+        Ze1.affecter_animal(a3);
 
-    
-      if (typeZone1 == 2 && zoneChoisie1 instanceof Zone_elevage) {
-        Zone_elevage ze = (Zone_elevage) zoneChoisie1;
+        Ze1.afficher_info();
 
-        System.out.println("donner la valuer du rendement en "+ze.get_unit());
-        float valeur = scanner.nextFloat();
-        ze.enregistrer_rendement(valeur);
- 
+        System.out.println("------------------------------------------------------------");
 
-    } 
-    
-if (typeZone1 == 3 && zoneChoisie1 instanceof Zone_aquacole) {
-    Zone_aquacole za = (Zone_aquacole) zoneChoisie1;
+        Ze2.afficher_info();
+        System.out.println("------------------------------------------------------------");
 
-    System.out.println("donner la valeur du rendement en " + za.get_unite());
-    float valeur = scanner.nextFloat(); 
-    scanner.nextLine();
-    za.enregistrer_rendement(valeur);
-}
-    
-    break;
-    case 6:
-    if (ferme.get_liste_de_zones().isEmpty()) {
-        System.out.println("Aucune zone disponible.");
-        break;
-    }
-    aff.lister_zones(ferme);
+        Zc1.suspension();
+        Zc1.afficher_info();
 
-    System.out.print("Nom de la zone culture : ");
-    String nomZone6 = scanner.nextLine();
+        System.out.println("------------------------------------------------------------");
 
-    Zone_geographique zone6 = ferme.chercher_zone(nomZone6);
-    if (zone6 == null || !(zone6 instanceof Zone_culture)) {
-        System.out.println("Zone culture introuvable.");
-        break;
-    }
+        Zc1.enregistrer_rendement_culture("rendement1", 120); // Ajoute à la zone cultures un rendement à au record
 
-    Zone_culture zc6 = (Zone_culture) zone6;
+        Za1.enregistrer_rendement(30); // Ajouter au tableau poids de la récolte à la zone Aquacole
 
-    // Afficher les cultures disponibles
-    zc6.afficher_cultures();
+        Ze1.enregistrer_rendement(12); // Ajouter au tableau rendement production de la zone elevage
 
-    System.out.print("Nom de la culture : ");
-    String nomCulture6 = scanner.nextLine();
 
-    System.out.println("Stade de croissance :");
-    System.out.println("1. SEMIS");
-    System.out.println("2. GERMINATION");
-    System.out.println("3. CROISSANCE");
-    System.out.println("4. MATURITE");
-    System.out.println("5. RECOLTE");
-    System.out.print("Votre choix : ");
-    int choixStade = scanner.nextInt();
-    scanner.nextLine();
+        System.out.println("------------------------------------------------------------");
 
-    Croissance stade = null;
-    if (choixStade == 1) stade = Croissance.SEMI;
-    else if (choixStade == 2) stade = Croissance.GERMINATION;
-    else if (choixStade == 3) stade = Croissance.CROISSANCE;
-    else if (choixStade == 4) stade = Croissance.MATURITE;
-    else if (choixStade == 5) stade = Croissance.RECOLTE;
+        capteur_bio bio1 = new capteur_bio(Ze2);
+        capteur_eau eau1 = new capteur_eau(Za1);
+        capteur_env env1 = new capteur_env(Zc1);
+        capteur_sol s1 = new capteur_sol(Zc1);
 
-    if (stade != null) {
-        zc6.mettre_a_jour_croissance(nomCulture6, stade);
-        System.out.println("Stade de croissance mis à jour !");
-    } else {
-        System.out.println("Choix invalide.");
-    }
-    break;
+        capteur_gps gps1 = new capteur_gps(Ze1);
+        
+        Limite_geographique L = new Limite_geographique(50, 15, 20);
+        Ze1.setLimites(L);
 
-case 7:
-    if (ferme.get_liste_de_zones().isEmpty()) {
-        System.out.println("Aucune zone disponible.");
-        break;
-    }
-    aff.lister_zones(ferme);
+        TypeMesure m = TypeMesure.TEMPERATURE;
+        Plage_Seuils Sbio = new Plage_Seuils(10, 32, 42, 50,m);
+        m = TypeMesure.OXYGENE;
+        Plage_Seuils Seau = new Plage_Seuils(13, 34, 35, 55,m);
+        m = TypeMesure.PH;
+        Plage_Seuils Ssol = new Plage_Seuils(16, 30, 42, 50,m);
+        m = TypeMesure.PLUVIOMETRIE;
+        Plage_Seuils Senv = new Plage_Seuils(16, 30, 42, 50,m);
 
-    System.out.print("Nom de la zone culture : ");
-    String nomZone7 = scanner.nextLine();
+        Zc1.AjouterCapteur(s1);
+        s1.addPlageSeuils(Ssol);
+        
 
-    Zone_geographique zone7 = ferme.chercher_zone(nomZone7);
-    if (zone7 == null || !(zone7 instanceof Zone_culture)) {
-        System.out.println("Zone culture introuvable.");
-        break;
-    }
+        Zc1.AjouterCapteur(env1);
+        env1.addPlageSeuils(Senv);
 
-    Zone_culture zc7 = (Zone_culture) zone7;
-    zc7.rapport_croissance();
-    break;
-                case 8:
-                    System.out.println("Au revoir !");
-                    break;
+        Za1.AjouterCapteur(eau1);
+        eau1.addPlageSeuils(Seau);
 
-                default:
-                    System.out.println("Choix invalide, réessayez.");
-            }
+        Ze2.AjouterCapteur(bio1);
+        bio1.addPlageSeuils(Sbio);
+
+        Ze1.AjouterCapteur(gps1);
+
+        gps1.setCoordonnee(20, 30, ferme);
+        
+
+        bio1.suspension();
+
+        eau1.Defaillant();
+
+        m = TypeMesure.PH;
+
+        try{
+            s1.setVal(20, m,ferme);
+            s1.setVal(35, m, ferme);
+            m =TypeMesure.PLUVIOMETRIE;
+            env1.setVal(43, m, ferme);
+            m =TypeMesure.TEMPERATURE;
+            bio1.setVal(33, m, ferme);
+            
+        }catch(WrongUniteException exception){
+            System.out.println("L'unité de mesure donnée est erronée");
+        }catch(OutsideTableException exception){
+            System.out.println("La valeur donnée est outside la plage de Seuils");
         }
-        scanner.close();
+            
+        
+
+        // Affiche les releve du capteur s1
+        System.out.println(s1.DisplayListReleve());
+        System.out.println("------------------------------------------------------------");
+
+        // Afficher les releves du capteur bio1
+        System.out.println(bio1.DisplayListReleve());
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println(gps1.DisplayListReleve());
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println(env1.DisplayListReleve());
+        System.out.println("------------------------------------------------------------");
+
+        LocalDate d1 = LocalDate.of(2026, 02, 13);
+        LocalDate d2 = LocalDate.of(2026, 06, 20);
+        try{
+            System.out.println(s1.DisplayReleveFiltre(d1, d2));
+        }catch(BeforeDateException exception){
+            System.out.println("La date de début est avant la date d'arrivée");
+        }
+        
+        System.out.println(ferme.DisplayAlertes());
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println(ferme.DisplayAlertesZone(Zc1));
+        System.out.println("------------------------------------------------------------");
+
+        Type_Capteurs t = Type_Capteurs.ENVIRONMENTAL;
+        System.out.println(ferme.DisplayAlertesCapteur(t));
+        System.out.println("------------------------------------------------------------");
+
+        gravite g = gravite.AVERTISSEMENT;
+        System.out.println(ferme.DisplayAlertesNiveau(g));
+        System.out.println("------------------------------------------------------------");
+
+        try{
+            System.out.println(ferme.DisplayAlertesPeriode(d1, d2));
+        }catch(BeforeDateException exception){
+            System.out.println("La date de début est avant la date d'arrivée");
+        }
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println(ferme.DisplayAlertesActive());
+        System.out.println("------------------------------------------------------------");
+
+
+        
+        
     }
+
+
 }

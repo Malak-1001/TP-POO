@@ -12,6 +12,8 @@ public void suspension(){this.active = status_zone.SUSPENDU;}
 public Zone_culture( String nom) {
         this.nom = nom;
         this.active = status_zone.ACTIF;
+        this.id =cpt;
+        cpt++ ;
     }
 public void affecter_cultures(Culture culture){
    cultures.add(culture);
