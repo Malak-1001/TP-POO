@@ -1,31 +1,38 @@
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 public class Zone_culture extends Zone_geographique{
-private List<Culture> cultures = new ArrayList<>();
-private record rendement_culture (String nom,float val){};
-private List<rendement_culture> RC = new ArrayList<>();
-
-public void afficher_relevee(){
-}
+private List<Culture> cultures = new ArrayList<>();//liste de culture
+private record rendement_culture (String nom,float val){};//type et valeur du rendement 
+private List<rendement_culture> RC = new ArrayList<>();//liste des rendement 
+//fonction de l'interface_activation
 public void activation(){this.active = status_zone.ACTIF;}
 public void suspension(){this.active = status_zone.SUSPENDU;}
-public Zone_culture( String nom) {
+//condtructeur seulement avc nom
+public Zone_culture( String nom,Limite_geographique limites,Ferme ferme) {
         this.nom = nom;
         this.active = status_zone.ACTIF;
-        this.id =cpt;
-        cpt++ ;
+        id=cpt;
+        this.ferme=ferme;
+         this.limites = limites;
+        cpt++;
+        ferme.ajouter_zone(this);
+        ferme.ajouter_zone_culture(this);
     }
+//ajouter une culture a la zone
 public void affecter_cultures(Culture culture){
    cultures.add(culture);
 }
+//cree et ajouter culture a la zone 
 public void affecter_cultures(String date_de_plantation, String date_de_recolte ,Famille_cult type,Exigences_pedologiques EP,String nomcult){
     cultures.add(new Culture(date_de_plantation,  date_de_recolte ,type, EP,nomcult));
 }
+//enregistrer un rendement 
 public void enregistrer_rendement_culture(String nom,float val){
 
 RC.add(new rendement_culture( nom, val));
 
 }
+//affichage pour le test 
 public void afficher_cultures(){
 for ( Culture c : cultures) {
             c.afficher_info();
@@ -33,6 +40,7 @@ for ( Culture c : cultures) {
 
 
 }
+//mettre a jour letat de croissance dune culture 
 public void mettre_a_jour_croissance(String nomCulture, Croissance stade) {
     for (Culture c : cultures) {
         if (c.getnomcult().equalsIgnoreCase(nomCulture)) {
@@ -42,6 +50,7 @@ public void mettre_a_jour_croissance(String nomCulture, Croissance stade) {
     }
     System.out.println("Culture introuvable.");
 }
+// rapport afichage pour le test 
 public void rapport_croissance() {
     int semis = 0, germination = 0, croissance = 0, maturite = 0, recolte = 0;
 
@@ -57,13 +66,7 @@ public void rapport_croissance() {
         }
     }
 
-    System.out.println("\n===== RAPPORT ÉTAT DES CULTURES =====");
-    System.out.println("SEMIS       : " + semis       + " culture(s)");
-    System.out.println("GERMINATION : " + germination + " culture(s)");
-    System.out.println("CROISSANCE  : " + croissance  + " culture(s)");
-    System.out.println("MATURITE    : " + maturite    + " culture(s)");
-    System.out.println("RECOLTE     : " + recolte     + " culture(s)");
-    System.out.println("TOTAL       : " + cultures.size() + " culture(s)");
+    
 }
 
 }
