@@ -1,65 +1,65 @@
-import java.util.List;
 import java.util.ArrayList;
-public class Ferme{
+import java.util.List;
 
-private List<Zone_geographique> liste_de_zones = new ArrayList<>();
+public class Ferme {
 
-
-private List<Alerte> liste_alerte = new ArrayList<>();
-
-
-private List<Releve> liste_de_releve = new ArrayList<>();
-
-public void ajouter_zone(Zone_geographique zone){
+    private List<Zone_geographique> liste_de_zones = new ArrayList<>();
+    private List<Zone_culture> liste_de_zones_culture = new ArrayList<>();
+    private List<Zone_elevage> liste_de_zones_elevage = new ArrayList<>();
+    private List<Zone_aquacole> liste_de_zones_aquacole = new ArrayList<>();
+    private List<Alerte> liste_alerte = new ArrayList<>();
     
-liste_de_zones.add(zone);
 
-}
-public void ajouter_zone(String type ,String nom){
-
-Zone_geographique zone;
-if (type.equalsIgnoreCase("culture")){
-zone=new Zone_culture(nom);
-liste_de_zones.add(zone);
-}
-if (type.equalsIgnoreCase("aquacole")){
-zone=new Zone_aquacole(nom);
-liste_de_zones.add(zone);
-}
-}
-public Zone_geographique chercher_zone(String nom){
-for (Zone_geographique z : liste_de_zones) {
-        if (z.nom.equalsIgnoreCase(nom)) {
-           
-            return z; 
-        }
+    // appelees par les constructeurs des zones
+    public void ajouter_zone(Zone_geographique zone) {
+        liste_de_zones.add(zone);
     }
-    return null;
-}
-public void suspension_zone(String nom){
-for (Zone_geographique z : liste_de_zones) {
-        if (z.nom.equalsIgnoreCase(nom)) {
-            z.suspension();
-            
-            return; 
-        }
+    public void ajouter_zone_culture(Zone_culture zone) {
+        liste_de_zones_culture.add(zone);
     }
-    System.out.println("Zone '" + nom + "' introuvable.");
+    public void ajouter_zone_elevage(Zone_elevage zone) {
+        liste_de_zones_elevage.add(zone);
+    }
+    public void ajouter_zone_aquacole(Zone_aquacole zone) {
+        liste_de_zones_aquacole.add(zone);
+    }
 
+    // chercher une zone par son nom
+    public Zone_geographique chercher_zone(String nom) {
+        for (Zone_geographique z : liste_de_zones) {
+            if (z.get_nom().equalsIgnoreCase(nom)) return z;
+        }
+        return null;
+    }
 
-}
-public void ajouter_zone( String nom, type_elevage elevage){
-Zone_geographique zone;
-zone = new Zone_elevage(  nom,elevage );
-liste_de_zones.add(zone);
-}
-public void ajouter_alerte(Alerte alerte){
-liste_alerte.add(alerte);
-
-}
-public void releve(Releve releve){
-liste_de_releve.add(releve);
-
-}
-public List get_liste_de_zones(){return liste_de_zones; }
+    // suspendre une zone par son nom
+    public void suspension_zone(String nom) {
+        for (Zone_geographique z : liste_de_zones) {
+            if (z.get_nom().equalsIgnoreCase(nom)) {
+                z.suspension();
+                return;
+            }
+        }
+        System.out.println("Zone '" + nom + "' introuvable.");
+    }
+    // activer une zone par son nom
+    public void activer_zone(String nom) {
+        for (Zone_geographique z : liste_de_zones) {
+            if (z.get_nom().equalsIgnoreCase(nom)) {
+                z.activation();
+                return;
+            }
+        }
+        System.out.println("Zone '" + nom + "' introuvable.");
+    }
+    //ajouter  alertes 
+    public void ajouter_alerte(Alerte alerte) { liste_alerte.add(alerte); }
+    
+    // getters
+    public List<Zone_geographique> get_liste_de_zones() { return liste_de_zones; }
+    public List<Zone_culture> get_liste_de_zones_culture() { return liste_de_zones_culture; }
+    public List<Zone_elevage> get_liste_de_zones_elevage() { return liste_de_zones_elevage; }
+    public List<Zone_aquacole> get_liste_de_zones_aquacole() { return liste_de_zones_aquacole; }
+    public List<Alerte> get_liste_alerte() { return liste_alerte; }
+    
 }
