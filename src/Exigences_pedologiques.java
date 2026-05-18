@@ -21,6 +21,14 @@ public class Exigences_pedologiques
     public float get_ph_max(){return ph_max;}
     public float get_humidite_min(){return humidite_min;}
     public float get_humidite_max(){return humidite_max;}
-
+    public String affiche_ex(){
+        StringBuilder s = new StringBuilder();
+        s.append("ph_min:"+ph_min);
+        s.append("ph_max:"+ph_max);
+        s.append("humidite_min:"+humidite_min);
+        s.append("humidite_max:"+humidite_max);
+        return s.toString();
+        
+    }
     
 }
