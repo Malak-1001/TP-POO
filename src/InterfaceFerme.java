@@ -18,14 +18,9 @@ import javafx.beans.property.SimpleStringProperty;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.classfile.Label;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.table.TableColumn;
-import javax.swing.text.TableView;
-import javax.swing.text.html.ListView;
 
 
 public class InterfaceFerme extends Application {
