@@ -35,8 +35,8 @@ public abstract class Releve{
     public static String colorierGravite( gravite g){
         return switch(g){
             case NORMAL -> "\u001B[32m" + g.name() + "\u001B[0m"; // Couleur vert
-            case AVERTISSEMENT -> "\u001B[32m" + g.name() + "\u001B[0m"; // Couleur vert
-            case CRITIQUE -> "\u001B[32m" + g.name() + "\u001B[0m"; // Couleur vert
+            case AVERTISSEMENT -> "\u001B[33m" + g.name() + "\u001B[0m"; // Couleur vert
+            case CRITIQUE -> "\u001B[31m" + g.name() + "\u001B[0m"; // Couleur vert
         };
     }
 

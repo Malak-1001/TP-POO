@@ -18,9 +18,14 @@ import javafx.beans.property.SimpleStringProperty;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.lang.classfile.Label;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.table.TableColumn;
+import javax.swing.text.TableView;
+import javax.swing.text.html.ListView;
 
 
 public class InterfaceFerme extends Application {
@@ -511,6 +516,8 @@ public class InterfaceFerme extends Application {
                 erreur("Valeur hors de la plage de seuils.");
             } catch (WrongUniteException ex) {
                 erreur("Type de mesure non gere par ce capteur.");
+            }catch(CapteurNonActifException exception){
+                erreur("Le capteur choisi est non actif pour le moment, vous ne pouvez pas ajouter de valeurs");
             }
         });
 
@@ -529,6 +536,9 @@ public class InterfaceFerme extends Application {
                 rafraichirTout();
                 info("Position GPS enregistree.");
             } catch (ChampInvalide ex) { erreur(ex.getMessage()); }
+            catch(CapteurNonActifException exception){
+                erreur("Le capteur choisi est non actif pour le moment, vous ne pouvez pas ajouter de valeurs");
+            }
         });
 
         // --- Releves ---

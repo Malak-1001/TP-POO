@@ -18,6 +18,16 @@ System.out.println("etat:"+active);
 System.out.println("id="+id);
 
 }
+
+    public String afficherCapteurs(){
+        StringBuilder S = new StringBuilder();
+        S.append(" Zone "+ nom + "\t  Status: "+ active);
+        for (capteur Capteur : list_de_capteur) {
+            S.append(Capteur.Display());
+            S.append("\t ---------------------------- ");
+        }
+        return S.toString();
+    }
 //setter
 public void set_nom(String nom){this.nom=nom;}
 //getter

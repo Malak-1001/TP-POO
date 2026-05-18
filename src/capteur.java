@@ -82,6 +82,16 @@ public abstract class capteur implements interface_activation {
     }
 
     /**
+     * Retourne une string qui affiche les informations basics du capteur
+     */
+    public String Display(){
+        StringBuilder S = new StringBuilder();
+        S.append("\n Capteur ID " + id +"\n" );
+        S.append( " - Type: "+ type + "\t  - Statut: " + statue +"\n");
+        return S.toString();
+    }
+
+    /**
      * Ajouter un releve à la liste de Releve du capteur
      * @param r
      */
