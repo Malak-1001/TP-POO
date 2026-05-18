@@ -28,6 +28,19 @@ public abstract class Releve{
     }
 
     /**
+     * Affiche les niveaux de gravité avec couleur
+     * @param g
+     * @return
+     */
+    public static String colorierGravite( gravite g){
+        return switch(g){
+            case NORMAL -> "\u001B[32m" + g.name() + "\u001B[0m"; // Couleur vert
+            case AVERTISSEMENT -> "\u001B[32m" + g.name() + "\u001B[0m"; // Couleur vert
+            case CRITIQUE -> "\u001B[32m" + g.name() + "\u001B[0m"; // Couleur vert
+        };
+    }
+
+    /**
      * Retourne un string permettant d'afficher le relevé
      * @return
      */

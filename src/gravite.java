@@ -1,5 +1,7 @@
 
 public enum gravite
 {
-    AVERTISSEMENT,CRITIQUE,NORMAL
+    AVERTISSEMENT,
+    CRITIQUE,
+    NORMAL
 }

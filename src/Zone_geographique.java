@@ -44,4 +44,23 @@ public void AjouterCapteur(capteur c) {
     public boolean equals(Zone_geographique z){
         return z.nom.equals(nom);
     }
+
+    /**
+     * Suspend la zone et ses capteurs
+     */
+    public void suspension(){
+        this.active = status_zone.SUSPENDU;
+        for (capteur capteur : list_de_capteur) {
+            capteur.suspension();
+        }
+    }
+
+    //fonction de l'interface_activation
+    public void activation(){
+        this.active = status_zone.ACTIF;
+        for (capteur capteur : list_de_capteur) {
+            capteur.activation();
+        }
+    }
+
 }

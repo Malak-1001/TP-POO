@@ -53,8 +53,9 @@ public class capteur_gps extends capteur{
      * Ajoute des coordonnées x y au tableau de coordonnées du capteur tout en créant un relevé 
      * @param lat
      */
-    public void setCoordonnee( float lon, float lat, Ferme f){
+    public void setCoordonnee( float lon, float lat, Ferme f) throws CapteurNonActifException{
         releve_gps R;
+        if(!(this.getStatut().equals(StatusCapteur.ACTIF))) throw new CapteurNonActifException();
         if(!DanslaZone(lon, lat)){
             R = new releve_gps(zone, lat, lon, CalculDistance(lon, lat), gravite.CRITIQUE);
             LocalDate d = R.getDate();

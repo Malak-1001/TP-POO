@@ -36,6 +36,15 @@ public class Ferme {
     }
 
     /**
+     * Ajoute un capteur à une zone donnée
+     * @param z
+     * @param c
+     */
+    public void AjouterCapteurZone (Zone_geographique z, capteur c){
+        z.AjouterCapteur(c);
+    }
+
+    /**
      * Retourne la liste des alertes actives
      * @return
      */
@@ -185,8 +194,17 @@ public class Ferme {
      * Change le statut de l'alerte ( Actif - Acquitté - Supprimé )
      * @param s
      */
-    public void ChangerStatutAlerte (statue_alerte s){
-        System.out.println(DisplayAlertes());
+    public void ChangerStatutAlerte (statue_alerte s, int i)throws NonExistentAlerteException{
+        Alerte alerte = liste_alerte.get(i);
+        if(alerte == null) throw new NonExistentAlerteException () ;
+        System.out.println(alerte.Display());
+        if(s.equals(statue_alerte.AQUITTE) && !(alerte.getStatut().equals(statue_alerte.AQUITTE))){
+            alerte.Acquitter();
+        }else if(s.equals(statue_alerte.SUPPRIME) && !(alerte.getStatut().equals(statue_alerte.SUPPRIME))){
+            alerte.Supprimer();
+        }
+        System.out.println("-------------------------");
+        System.out.println(alerte.Display());
         
     }
     // suspendre une zone par son nom

@@ -55,7 +55,7 @@ public abstract class capteur_num extends capteur{
                 Ranges.add(S);
             }
         }catch(WrongUniteException e){
-            System.out.println("Le type de Mesure "+ m+ " n'est pas disponible dans un capteur d'eau");
+            System.out.println("Le type de Mesure "+ m+ " n'est pas disponible dans ce capteur");
         }
     };
 
@@ -79,9 +79,7 @@ public abstract class capteur_num extends capteur{
         }
         Ranges.add(e);
     };
-
     
-
 
     /**
      * Retourne la plage de Seuils pour le type de mesure donnée comme parametre uniquement
@@ -102,7 +100,6 @@ public abstract class capteur_num extends capteur{
     }
 
 
-
     /**
      * Retourne la valeur prélevée avec les types de mesures pris en charge pas le capteur environmentales
      * @param m
@@ -120,8 +117,9 @@ public abstract class capteur_num extends capteur{
      * Ajoute une valeur au tableau de valeurs relevées par le capteur
      * @param v
      */
-    public void setVal(float v, TypeMesure m, Ferme f) throws OutsideTableException , WrongUniteException {
+    public void setVal(float v, TypeMesure m, Ferme f) throws OutsideTableException , WrongUniteException, CapteurNonActifException {
         if(! (Unites.contains(m))) throw new WrongUniteException();
+        if(!(this.getStatut().equals(StatusCapteur.ACTIF))) throw new CapteurNonActifException();
         for (Plage_Seuils plage_Seuils : Ranges) {
             if(plage_Seuils.getMesure() == m){
                 if(v < plage_Seuils.getMinVal() || v> plage_Seuils.getMaxVal())throw new OutsideTableException();
