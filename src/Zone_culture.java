@@ -4,9 +4,8 @@ public class Zone_culture extends Zone_geographique{
 private List<Culture> cultures = new ArrayList<>();//liste de culture
 private record rendement_culture (String nom,float val){};//type et valeur du rendement 
 private List<rendement_culture> RC = new ArrayList<>();//liste des rendement 
-//fonction de l'interface_activation
-public void activation(){this.active = status_zone.ACTIF;}
-public void suspension(){this.active = status_zone.SUSPENDU;}
+
+
 //condtructeur seulement avc nom
 public Zone_culture( String nom,Limite_geographique limites,Ferme ferme) {
         this.nom = nom;
@@ -63,9 +62,18 @@ public void rapport_croissance() {
             case CROISSANCE:  croissance++;  break;
             case MATURITE:    maturite++;    break;
             case RECOLTE:     recolte++;     break;
+        
         }
+        System.out.println("nom de la culture:"+c.getnomcult());
+    System.out.println("SEMI:"+semis);
+    System.out.println("GERMINATION:"+germination);
+    System.out.println("CROISSANCE:"+croissance);
+    System.out.println("MATURITE:"+maturite);
+    System.out.println("RECOLTE:"+recolte);
     }
-
+    
+    
+    
     
 }
 
