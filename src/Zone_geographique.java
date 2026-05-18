@@ -11,11 +11,12 @@ protected Ferme ferme;
 
 private List<capteur> list_de_capteur = new ArrayList<>();//liste de capteur pour la zone
 
-
+public void activation(){this.active = status_zone.ACTIF;}
+public void suspension(){this.active = status_zone.SUSPENDU;}
 //methode daffichage uniquement pour le test
 public void afficher_info(){
-System.out.println(nom);
-System.out.println(active);
+System.out.println("nom:"+nom);
+System.out.println("etat:"+active);
 System.out.println("id="+id);
 
 }
