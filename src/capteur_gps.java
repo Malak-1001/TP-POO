@@ -75,7 +75,7 @@ public class capteur_gps extends capteur{
     /**
      * Permets de retourner la latitude enregistré par le capteur
      * @return latitude (float)
-     */
+    */
     public float[] getCoordonnee (){
         float[] ActualCoord = new float[2]; 
         ActualCoord[0] =this.coordonnee[i][0] ; //Latitude 

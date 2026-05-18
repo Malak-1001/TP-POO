@@ -11,11 +11,8 @@ private type_elevage type;//volail ou ruminant
 private type_production rendement;//lait ou oeuf
 //getter de luniter de mesure de la production 
 public TypeMesure get_unit(){return unite;}
-<<<<<<< Updated upstream
 
 
-=======
->>>>>>> Stashed changes
 //constructeur avec nom et type delevage
 public Zone_elevage( String nom, type_elevage type,Limite_geographique limites,Ferme ferme) {
       

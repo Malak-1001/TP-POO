@@ -5,12 +5,8 @@ private List<Culture> cultures = new ArrayList<>();//liste de culture
 private record rendement_culture (String nom,float val){};//type et valeur du rendement 
 private List<rendement_culture> RC = new ArrayList<>();//liste des rendement 
 
-<<<<<<< Updated upstream
 
-//condtructeur seulement avc nom
-=======
 //constructeur seulement avc nom
->>>>>>> Stashed changes
 public Zone_culture( String nom,Limite_geographique limites,Ferme ferme) {
         this.nom = nom;
         this.active = status_zone.ACTIF;

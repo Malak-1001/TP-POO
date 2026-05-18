@@ -8,10 +8,7 @@ private List<Float> poid_de_recolte = new ArrayList<>();//poid de la recolte
 private TypeMesure unite=TypeMesure.POIDS;//unite de mesure du poid 
 //getter
 public TypeMesure get_unite(){return unite;}
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 //constructeur avec le nom seulement 
 public Zone_aquacole( String nom,Limite_geographique limites,Ferme ferme) {
        
