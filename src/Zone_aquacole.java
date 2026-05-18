@@ -8,9 +8,7 @@ private List<Float> poid_de_recolte = new ArrayList<>();//poid de la recolte
 private TypeMesure unite=TypeMesure.POIDS;//unite de mesure du poid 
 //getter
 public TypeMesure get_unite(){return unite;}
-//fonction de l'interface_activation
-public void activation(){this.active = status_zone.ACTIF;}
-public void suspension(){this.active = status_zone.SUSPENDU;}
+
 //constructeur avec le nom seulement 
 public Zone_aquacole( String nom,Limite_geographique limites,Ferme ferme) {
        
@@ -33,10 +31,10 @@ public Zone_aquacole( String nom,Limite_geographique limites,Ferme ferme) {
         cpt++ ;
         this.active = status_zone.ACTIF;
         bassin=new Bassin(nbanim);
-         id=cpt;
+         
          this.ferme=ferme;
           this.limites = limites;
-        cpt++;
+        
         ferme.ajouter_zone(this);
         ferme.ajouter_zone_aquacole(this);
         
@@ -50,10 +48,11 @@ poid_de_recolte.add(val);
 }
 // methode pour test over
 public void afficher_info(){
-System.out.println(nom);
-System.out.println(active);
-System.out.println("nombre entites : ");
-System.out.println(+bassin.get_nbanimeaux());
+System.out.println("nom:"+nom);
+System.out.println("id="+id);
+System.out.println("etat:"+active);
+System.out.println("nombre entites : "+bassin.get_nbanimeaux());
+
 }
 //ajouter des animeaux au bassin
 public void ajouter_animeaux(int v){bassin.ajouter_animeaux(v);}
