@@ -11,14 +11,23 @@ protected Ferme ferme;
 
 private List<capteur> list_de_capteur = new ArrayList<>();//liste de capteur pour la zone
 
-
 //methode daffichage uniquement pour le test
 public void afficher_info(){
-System.out.println(nom);
-System.out.println(active);
+System.out.println("nom:"+nom);
+System.out.println("etat:"+active);
 System.out.println("id="+id);
 
 }
+
+    public String afficherCapteurs(){
+        StringBuilder S = new StringBuilder();
+        S.append(" Zone "+ nom + "\t  Status: "+ active);
+        for (capteur Capteur : list_de_capteur) {
+            S.append(Capteur.Display());
+            S.append("\t ---------------------------- ");
+        }
+        return S.toString();
+    }
 //setter
 public void set_nom(String nom){this.nom=nom;}
 //getter
@@ -40,4 +49,26 @@ public void AjouterCapteur(capteur c) {
         list_de_capteur.add(c);
     }
 
+    public boolean equals(Zone_geographique z){
+        return z.nom.equals(nom);
+    }
+
+    /**
+     * Suspend la zone et ses capteurs
+     */
+    public void suspension(){
+        this.active = status_zone.SUSPENDU;
+        for (capteur capteur : list_de_capteur) {
+            capteur.suspension();
+        }
+    }
+
+    //fonction de l'interface_activation
+    public void activation(){
+        this.active = status_zone.ACTIF;
+        for (capteur capteur : list_de_capteur) {
+            capteur.activation();
+        }
+    }
+    public abstract void afficher_rendement();
 }
