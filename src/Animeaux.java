@@ -26,6 +26,8 @@ this.etat_de_sante=sante.SAIN;
 //constructeur et etat de santer init
 public Animeaux(String espece,int age,int poid,sante etat_de_sante){
   this.age=age;
+  this.id =this.cpt;
+  cpt++ ;
 this.espece=espece;
 this.poid.add(poid);
 this.id=Animeaux.cpt;
@@ -47,7 +49,28 @@ public void ajouter_poids(int nouveau_poid){
 public void set_etat_de_sante(sante etat){
   this.etat_de_sante = etat;
 }
+public void afficher_animal(){
+System.out.println("age: "+age);
+System.out.println("espece: "+espece);
+System.out.println("etat de sante : "+etat_de_sante);
 
+}
+public void afficher_maladie_evolution(){
+for (String m : maladie){
+    int i=1; 
+System.out.println("maladie"+i+" "+m);
+i++;
+
+}
+}
+public void afficher_poid_evolution(){
+for (float p :poid ){
+    int i=1; 
+System.out.println("poid"+i+" "+p);
+i++;
+
+}
+}
 public int get_id(){return id;}
 public String get_espece(){return espece;}
 public int get_age(){return age;}
