@@ -227,6 +227,12 @@ public class Ferme {
         }
         System.out.println("Zone '" + nom + "' introuvable.");
     }
+    public Zone_geographique getZone(String nomzone) {
+    for (Zone_geographique z : liste_de_zones) {
+        if (z.get_nom().equalsIgnoreCase(nomzone)) return z;
+    }
+    return null;
+}
     //ajouter  alertes 
     public void ajouter_alerte(Alerte alerte) { liste_alerte.add(alerte); }
     

@@ -50,8 +50,8 @@ public void set_etat_de_sante(sante etat){
   this.etat_de_sante = etat;
 }
 public void afficher_animal(){
-System.out.println("age;"+age);
-System.out.println("espece"+espece);
+System.out.println("age: "+age);
+System.out.println("espece: "+espece);
 System.out.println("etat de sante : "+etat_de_sante);
 
 }

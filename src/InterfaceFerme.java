@@ -19,25 +19,10 @@ import javafx.scene.chart.*;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.classfile.Label;
-//import java.lang.classfile.Label;
-//import java.lang.classfile.Label;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.table.TableColumn;
-import javax.swing.text.TableView;
-import javax.swing.text.html.ListView;
-
-/*import javax.swing.table.TableColumn;
-import javax.swing.text.TableView;
-import javax.swing.text.html.ListView;*/
-
-/*import javax.swing.table.TableColumn;
-import javax.swing.text.TableView;
-import javax.swing.text.html.ListView;*/
+import java.util.ArrayList;
 
 
 public class InterfaceFerme extends Application {
@@ -297,7 +282,7 @@ private void afficherGraphiqueZone(Zone_geographique z) {
     private VBox entete() {
         Label titre = new Label("Gestion de la ferme");
         titre.setFont(Font.font("System", FontWeight.BOLD, 22));
-        Label sous = new Label("Exploitation agricole - zones, capteurs, alertes");
+        Label sous = new Label("Gestion complete de la ferme ");
         sous.setStyle("-fx-text-fill: #555;");
         VBox b = new VBox(2, titre, sous);
         b.setPadding(new Insets(0, 0, 10, 0));
@@ -324,7 +309,7 @@ private void afficherGraphiqueZone(Zone_geographique z) {
         x.setPrefWidth(70); y.setPrefWidth(70); r.setPrefWidth(70);
 
         ComboBox<String> typeElevage = new ComboBox<>(FXCollections.observableArrayList(
-                "VOLAIL", "RUMINANT"));
+                "VOLAIL", "RUMINANT"));//deroulant type delevage 
         typeElevage.getSelectionModel().selectFirst();
         TextField nbAnim = new TextField(); nbAnim.setPromptText("Nombre d'animaux");
 
@@ -396,9 +381,36 @@ private void afficherGraphiqueZone(Zone_geographique z) {
 
         Button afficher = new Button("Afficher toutes les zones (console)");
         afficher.setOnAction(e -> new Affichage().afficher_zones(ferme));
-
-        HBox actions = new HBox(8, activer, suspendre, charger, afficher);
-
+        Button cult_aff = new Button("Afficher culture");
+        
+        
+        Button aff_animeaux = new Button("Afficher Animeaux");
+       Button aff_rapport = new Button("Afficher rapport");
+       Button aff_prog = new Button("Afficher programme allimentaire");
+       Button evement_sanit = new Button("Consigner evement");
+        
+        Button nb_entiter = new Button("Nombre entite");
+        Button aff_rendement = new Button("Afficher le rendement");
+        cult_aff.setVisible(false);
+        cult_aff.setManaged(false);
+        aff_animeaux.setVisible(false);
+        aff_animeaux.setManaged(false);
+        nb_entiter.setVisible(false);
+        nb_entiter.setManaged(false);
+        aff_rendement.setVisible(false);
+        aff_rendement.setManaged(false);
+        aff_rapport.setVisible(false);
+        aff_rapport.setManaged(false);
+        aff_prog.setVisible(false);
+        aff_prog.setManaged(false);
+        evement_sanit.setVisible(false);
+        evement_sanit.setManaged(false);
+        
+        HBox actions = new HBox(8, activer, suspendre, charger, afficher,cult_aff,aff_animeaux,nb_entiter,aff_rendement,aff_rapport,
+        aff_prog,evement_sanit);
+        
+        
+        
         tableZones = new TableView<>();
         donneesZones = FXCollections.observableArrayList();
         tableZones.setItems(donneesZones);
@@ -408,7 +420,74 @@ private void afficherGraphiqueZone(Zone_geographique z) {
         tableZones.getColumns().add(colonne("Type", "type", 110));
         tableZones.getColumns().add(colonne("Statut", "statut", 100));
         tableZones.getColumns().add(colonne("Position (x, y, r)", "position", 180));
+        tableZones.getSelectionModel().selectedItemProperty().addListener((o, ancien, nouveau) -> {
+    if (nouveau == null) {
+        cult_aff.setVisible(false);
+        cult_aff.setManaged(false);
+        aff_animeaux.setVisible(false);
+        aff_animeaux.setManaged(false);
+        nb_entiter.setVisible(false);
+        nb_entiter.setManaged(false);
+    } else {
+        boolean estCulture = "Culture".equals(nouveau.getType());
+        boolean estElevage = "Elevage".equals(nouveau.getType());
+        boolean estaqua = "Aquacole".equals(nouveau.getType());
+        
+        cult_aff.setVisible(estCulture);
+        cult_aff.setManaged(estCulture);
+        aff_rapport.setVisible(estCulture);
+        aff_rapport.setManaged(estCulture);
+        aff_animeaux.setVisible(estElevage);
+        aff_animeaux.setManaged(estElevage);
+        nb_entiter.setVisible(estaqua);
+        nb_entiter.setManaged(estaqua);
+        aff_rendement.setVisible(true);
+        aff_rendement.setManaged(true);
+        aff_prog.setVisible(estElevage);
+        aff_prog.setManaged(estElevage);
+        evement_sanit.setVisible(estElevage);
+        evement_sanit.setManaged(estElevage);
+        
+    }
+});
+cult_aff.setOnAction(e -> {
+    LigneZone s = tableZones.getSelectionModel().getSelectedItem();
+    if (s != null) {Zone_culture zc = (Zone_culture) ferme.getZone(s.getNom());
+        zc.afficher_cultures();}
+});
 
+aff_rapport.setOnAction(e -> {
+    LigneZone s = tableZones.getSelectionModel().getSelectedItem();
+    if (s != null) {Zone_culture zc = (Zone_culture) ferme.getZone(s.getNom());
+        zc.rapport_croissance();}
+});
+aff_animeaux.setOnAction(e -> {
+    LigneZone s = tableZones.getSelectionModel().getSelectedItem();
+    if (s != null) {Zone_elevage ze = (Zone_elevage) ferme.getZone(s.getNom());
+        ze.afficher_animeaux();}
+});
+nb_entiter.setOnAction(e -> {
+    LigneZone s = tableZones.getSelectionModel().getSelectedItem();
+    if (s != null) {Zone_aquacole za = (Zone_aquacole) ferme.getZone(s.getNom());
+        za.afficher_nb_entiter();}
+});
+
+aff_rendement.setOnAction(e -> {
+    LigneZone s = tableZones.getSelectionModel().getSelectedItem();
+    if (s != null) {Zone_geographique zg = (Zone_geographique) ferme.getZone(s.getNom());
+        zg.afficher_rendement();}
+});
+
+aff_prog.setOnAction(e -> {
+    LigneZone s = tableZones.getSelectionModel().getSelectedItem();
+    if (s != null) {Zone_elevage ze = (Zone_elevage) ferme.getZone(s.getNom());
+        ze.afficher_programme_alimentaire();}
+});
+evement_sanit.setOnAction(e -> {
+    LigneZone s = tableZones.getSelectionModel().getSelectedItem();
+    if (s != null) {Zone_elevage ze = (Zone_elevage) ferme.getZone(s.getNom());
+        ze.afficher_rapport_sanitaire();}
+});
         VBox box = new VBox(10,
                 titreSection("Ajouter une zone"), g, ligneElevage, ligneAqua, creer,
                 new Separator(),
@@ -565,6 +644,44 @@ private void afficherGraphiqueZone(Zone_geographique z) {
         });
 
         TextField rdt = new TextField(); rdt.setPromptText("Rendement (lait / oeufs)");
+        ComboBox<String> comboAnimaux = new ComboBox<>();
+comboAnimaux.setPrefWidth(200);
+comboAnimaux.setPromptText("Choisir un animal");
+
+comboZonesElevage.setOnAction(e -> {
+    comboAnimaux.getItems().clear();
+    Zone_elevage z = (Zone_elevage) zoneParNom(comboZonesElevage);
+    if (z == null) return;
+    for (Animeaux a : z.get_list_animeaux()) {
+        comboAnimaux.getItems().add(a.get_id() + " - " + a.get_espece());
+    }
+    if (!comboAnimaux.getItems().isEmpty())
+        comboAnimaux.getSelectionModel().selectFirst();
+});
+
+TextField nouveauPoids = new TextField(); nouveauPoids.setPromptText("Nouveau poids");
+Button majPoids = new Button("Mettre a jour le poids");
+majPoids.setOnAction(e -> {
+    Zone_elevage z = (Zone_elevage) zoneParNom(comboZonesElevage);
+    int i = comboAnimaux.getSelectionModel().getSelectedIndex();
+    if (z == null || i < 0) { erreur("Choisissez une zone et un animal."); return; }
+    try {
+        z.get_list_animeaux().get(i).ajouter_poids(entier(nouveauPoids, "poids"));
+        info("Poids mis a jour."); nouveauPoids.clear();
+    } catch (ChampInvalide ex) { erreur(ex.getMessage()); }
+});
+
+ComboBox<sante> nouvelEtat = new ComboBox<>(
+        FXCollections.observableArrayList(sante.values()));
+nouvelEtat.getSelectionModel().selectFirst();
+Button majSante = new Button("Mettre a jour la sante");
+majSante.setOnAction(e -> {
+    Zone_elevage z = (Zone_elevage) zoneParNom(comboZonesElevage);
+    int i = comboAnimaux.getSelectionModel().getSelectedIndex();
+    if (z == null || i < 0) { erreur("Choisissez une zone et un animal."); return; }
+    z.get_list_animeaux().get(i).set_etat_de_sante(nouvelEtat.getValue());
+    info("Etat de sante mis a jour.");
+});
         Button addRdt = new Button("Enregistrer le rendement");
         addRdt.setOnAction(e -> {
             Zone_elevage z = (Zone_elevage) zoneParNom(comboZonesElevage);
@@ -583,18 +700,22 @@ private void afficherGraphiqueZone(Zone_geographique z) {
         });
 
         VBox box = new VBox(10,
-                titreSection("Zone d'elevage"), comboZonesElevage,
-                new Separator(),
-                titreSection("Affecter un animal"),
-                new HBox(8, espece, age, poids, etat, addAnim),
-                new Separator(),
-                titreSection("Programme alimentaire"),
-                new HBox(8, qte, alim, addPA),
-                new Separator(),
-                titreSection("Rendement de production"),
-                new HBox(8, rdt, addRdt),
-                new Separator(), infoBtn);
-        box.setPadding(new Insets(10));
+        titreSection("Zone d'elevage"), comboZonesElevage,
+        new Separator(),
+        titreSection("Affecter un animal"),
+        new HBox(8, espece, age, poids, etat, addAnim),
+        new Separator(),
+        titreSection("Mettre a jour un animal"),
+        new HBox(8, new Label("Animal"), comboAnimaux),
+        new HBox(8, nouveauPoids, majPoids),
+        new HBox(8, nouvelEtat, majSante),
+        new Separator(),
+        titreSection("Programme alimentaire"),
+        new HBox(8, qte, alim, addPA),
+        new Separator(),
+        titreSection("Rendement de production"),
+        new HBox(8, rdt, addRdt),
+        new Separator(), infoBtn);
         return box;
     }
 
@@ -617,17 +738,18 @@ private void afficherGraphiqueZone(Zone_geographique z) {
                 nb.clear();
             } catch (ChampInvalide ex) { erreur(ex.getMessage()); }
         });
-
+        TextField typePoisson = new TextField(); typePoisson.setPromptText("Type de poisson");
         TextField rdt = new TextField(); rdt.setPromptText("Poids de recolte");
         Button addRdt = new Button("Enregistrer le rendement");
         addRdt.setOnAction(e -> {
-            Zone_aquacole z = (Zone_aquacole) zoneParNom(comboZonesAquacole);
-            if (z == null) { erreur("Choisissez une zone aquacole."); return; }
-            try {
-                z.enregistrer_rendement(flottant(rdt, "poids"));
-                info("Rendement enregistre.");
-            } catch (ChampInvalide ex) { erreur(ex.getMessage()); }
-        });
+    Zone_aquacole z = (Zone_aquacole) zoneParNom(comboZonesAquacole);
+    if (z == null) { erreur("Choisissez une zone aquacole."); return; }
+    try {
+        z.enregistrer_rendement(typePoisson.getText().trim(), flottant(rdt, "poids"));
+        info("Rendement enregistre.");
+        rdt.clear(); typePoisson.clear();
+    } catch (ChampInvalide ex) { erreur(ex.getMessage()); }
+});
 
         Button infoBtn = new Button("Afficher la zone (console)");
         infoBtn.setOnAction(e -> {
@@ -643,7 +765,7 @@ private void afficherGraphiqueZone(Zone_geographique z) {
                 new HBox(8, nb, addAnim),
                 new Separator(),
                 titreSection("Rendement"),
-                new HBox(8, rdt, addRdt),
+                new HBox(8, typePoisson, rdt, addRdt),
                 new Separator(), infoBtn);
         box.setPadding(new Insets(10));
         return box;

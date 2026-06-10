@@ -79,5 +79,5 @@ public void AjouterCapteur(capteur c) {
             capteur.activation();
         }
     }
-
+    public abstract void afficher_rendement();
 }

@@ -42,6 +42,13 @@ for ( Culture c : cultures) {
 
 
 }
+public void afficher_rendement(){
+System.out.println("=== Rendements de la zone ===" );
+    for (rendement_culture rc : RC) {
+        System.out.println("type : " + rc.nom() + " | Rendement : " + rc.val());
+    }
+
+}
 //mettre a jour letat de croissance dune culture 
 public void mettre_a_jour_croissance(String nomCulture, Croissance stade) {
     for (Culture c : cultures) {

@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 public class Zone_aquacole extends Zone_geographique{
 private Bassin bassin;//bassin de la zone
-
-private List<Float> poid_de_recolte = new ArrayList<>();//poid de la recolte 
+private record recolte (String nom,float val){};
+private List<recolte> poid_de_recolte = new ArrayList<>();//poid de la recolte 
 
 private TypeMesure unite=TypeMesure.POIDS;//unite de mesure du poid 
 //getter
@@ -45,9 +45,9 @@ public Zone_aquacole( String nom,Limite_geographique limites,Ferme ferme) {
         
     }
     //enregistrer le rendement 
-public void enregistrer_rendement(float val){
+public void enregistrer_rendement(String nom ,float val){
 
-poid_de_recolte.add(val);
+poid_de_recolte.add(new recolte( nom, val));
 
 
 }
@@ -57,6 +57,19 @@ System.out.println("nom:"+nom);
 System.out.println("id="+id);
 System.out.println("etat:"+active);
 System.out.println("nombre entites : "+bassin.get_nbanimeaux());
+
+}
+public void afficher_nb_entiter(){
+
+System.out.println("nombre entites : "+bassin.get_nbanimeaux());
+
+}
+public void afficher_rendement(){
+System.out.println("=== Rendements de la zone " + nom + " ===");
+    for (int i = 0; i < poid_de_recolte.size(); i++) {
+        recolte rc = poid_de_recolte.get(i);
+        System.out.println("Récolte " + (i+1) + " | Type : " + rc.nom() + " | Poids : " + rc.val() + " " + unite);
+    }
 
 }
 //ajouter des animeaux au bassin
