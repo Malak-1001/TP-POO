@@ -41,6 +41,15 @@ public abstract class capteur_num extends capteur{
      */
     public Object[] getVal ;
 
+    /**
+     * Retourne les unites liées au capteur numérique
+     * @param plage
+     * @param m
+     */
+    public List<TypeMesure> getUnites(){
+        return Unites;
+    }
+
     
    /**
      * Enregistre les valeurs seuils du capteurs

@@ -8,8 +8,17 @@ protected status_zone active;//status de la zone actif ou suspendu
 protected Limite_geographique limites;//limite geographique de la zone sous forme de rond
 protected Ferme ferme;
 
+// J'ai ajouté ceci pour mieux gérer l'ajout des capteurs
+// Ajout de la liste de type de capteurs acceptés par la zone en question
+protected List<Type_Capteurs> SpecifiqueCapteurs ;
+
 
 private List<capteur> list_de_capteur = new ArrayList<>();//liste de capteur pour la zone
+
+//--------- Malak
+public List<Type_Capteurs> getSpecifiqueCapteurs(){
+    return SpecifiqueCapteurs;
+}
 
 //methode daffichage uniquement pour le test
 public void afficher_info(){

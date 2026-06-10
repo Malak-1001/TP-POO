@@ -21,6 +21,8 @@ public Zone_aquacole( String nom,Limite_geographique limites,Ferme ferme) {
         cpt++;
         ferme.ajouter_zone(this);
         ferme.ajouter_zone_aquacole(this);
+        super.SpecifiqueCapteurs = List.of(
+            Type_Capteurs.EAU);
         
     }
     // constructeur avec nom de la zone et nombre danimeaux 
@@ -37,6 +39,9 @@ public Zone_aquacole( String nom,Limite_geographique limites,Ferme ferme) {
         
         ferme.ajouter_zone(this);
         ferme.ajouter_zone_aquacole(this);
+        //---- Malak
+        super.SpecifiqueCapteurs = List.of(
+            Type_Capteurs.EAU);
         
     }
     //enregistrer le rendement 

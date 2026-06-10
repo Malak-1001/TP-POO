@@ -36,4 +36,20 @@ public class releve_num extends Releve{
 
         return S.toString() ;
     }
+
+    //---- Malak
+    /**
+     * Retourne l'unité utilisée dans ce relevé
+     * @return
+     */
+    public TypeMesure getUnite() { 
+        return unite;
+    }
+
+    /**
+     * Retourne la valeur enregistrée dans le relevé
+     */
+    public float getVal() { 
+        return val; 
+    }
 }

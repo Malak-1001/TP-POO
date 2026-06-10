@@ -16,6 +16,9 @@ public Zone_culture( String nom,Limite_geographique limites,Ferme ferme) {
         cpt++;
         ferme.ajouter_zone(this);
         ferme.ajouter_zone_culture(this);
+        super.SpecifiqueCapteurs = List.of(
+            Type_Capteurs.ENVIRONMENTAL, 
+            Type_Capteurs.SOL);
     }
 //ajouter une culture a la zone
 public void affecter_cultures(Culture culture){

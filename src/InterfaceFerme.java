@@ -14,13 +14,30 @@ import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.chart.*;
 
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.lang.classfile.Label;
+//import java.lang.classfile.Label;
+//import java.lang.classfile.Label;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.table.TableColumn;
+import javax.swing.text.TableView;
+import javax.swing.text.html.ListView;
+
+/*import javax.swing.table.TableColumn;
+import javax.swing.text.TableView;
+import javax.swing.text.html.ListView;*/
+
+/*import javax.swing.table.TableColumn;
+import javax.swing.text.TableView;
+import javax.swing.text.html.ListView;*/
 
 
 public class InterfaceFerme extends Application {
@@ -40,6 +57,111 @@ public class InterfaceFerme extends Application {
     private ComboBox<String> comboZonesAquacole;//liste deroulante des zone aquacole
     private ComboBox<String> comboZonesCapteur;//liste deroulante des zone dans longletcapteur
     private ComboBox<String> comboCapteurs;//liste deroulante des capteurs de la zone choisie
+    private ComboBox<String> typeCapteur; // New add
+
+    // New for time management
+    private Timeline timelineReleves = null;   // le timer périodique
+    private int ligneEnCours = 0;              // index de la prochaine ligne à lire
+    private List<String> lignesReleves = new ArrayList<>(); // lignes pré-chargées
+
+    //------Malak
+    /*private void afficherGraphique(capteur_num c) {
+        // Axe X = index du relevé (1, 2, 3...), Axe Y = valeur
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Relevé n°");
+        yAxis.setLabel("Valeur");
+
+        LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+        chart.setTitle("Évolution des relevés - " + c.getType() + " (Zone: " + c.getZone().get_nom() + ")");
+        chart.setCreateSymbols(true);
+        chart.setAnimated(false);
+
+        // On regroupe par TypeMesure pour avoir une série par mesure
+        java.util.Map<TypeMesure, XYChart.Series<Number, Number>> seriesMap = new java.util.LinkedHashMap<>();
+
+        List<Releve> releves = c.getListReleve();
+        for (int i = 0; i < releves.size(); i++) {
+            Releve r = releves.get(i);
+            if (r instanceof releve_num) {
+                releve_num rn = (releve_num) r;
+                // On a besoin du TypeMesure — il faut un getter (voir note ci-dessous)
+                TypeMesure m = rn.getUnite();
+                seriesMap.putIfAbsent(m, new XYChart.Series<>());
+                seriesMap.get(m).setName(m.name());
+                seriesMap.get(m).getData().add(new XYChart.Data<>(i + 1, rn.getVal()));
+            }
+        }
+
+        chart.getData().addAll(seriesMap.values());
+
+        Stage s = new Stage();
+        s.setTitle("Graphique - " + c.getType());
+        s.setScene(new Scene(chart, 650, 400));
+        s.show();
+    }*/
+
+    // Graphique pour un seul capteur — une série par TypeMesure
+private void afficherGraphiqueCapteur(capteur_num c) {
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    xAxis.setLabel("Relevé n°");
+    yAxis.setLabel("Valeur");
+
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+    chart.setTitle("Capteur " + c.getType() + " — Zone: " + c.getZone().get_nom());
+    chart.setAnimated(false);
+
+    java.util.Map<TypeMesure, XYChart.Series<Number, Number>> seriesMap = new java.util.LinkedHashMap<>();
+    List<Releve> releves = c.getListReleve();
+    for (int i = 0; i < releves.size(); i++) {
+        if (releves.get(i) instanceof releve_num rn) {
+            TypeMesure m = rn.getUnite();
+            seriesMap.putIfAbsent(m, new XYChart.Series<>());
+            seriesMap.get(m).setName(m.name() + " (" + m.getUnite() + ")");
+            seriesMap.get(m).getData().add(new XYChart.Data<>(i + 1, rn.getVal()));
+        }
+    }
+    chart.getData().addAll(seriesMap.values());
+
+    Stage s = new Stage();
+    s.setTitle("Graphique capteur " + c.getId());
+    s.setScene(new Scene(chart, 700, 420));
+    s.show();
+}
+
+// Graphique pour toute une zone — une série par capteur numérique
+private void afficherGraphiqueZone(Zone_geographique z) {
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    xAxis.setLabel("Relevé n°");
+    yAxis.setLabel("Valeur");
+
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+    chart.setTitle("Zone: " + z.get_nom() + " — tous les capteurs numériques");
+    chart.setAnimated(false);
+
+    for (capteur c : z.getListCapteurs()) {
+        if (!(c instanceof capteur_num cn)) continue;
+        List<Releve> releves = cn.getListReleve();
+        // une série par (capteur + mesure)
+        java.util.Map<TypeMesure, XYChart.Series<Number, Number>> seriesMap = new java.util.LinkedHashMap<>();
+        for (int i = 0; i < releves.size(); i++) {
+            if (releves.get(i) instanceof releve_num rn) {
+                TypeMesure m = rn.getUnite();
+                seriesMap.putIfAbsent(m, new XYChart.Series<>());
+                seriesMap.get(m).setName("Cap." + c.getId() + " - " + m.name());
+                seriesMap.get(m).getData().add(new XYChart.Data<>(i + 1, rn.getVal()));
+            }
+        }
+        chart.getData().addAll(seriesMap.values());
+    }
+
+    Stage s = new Stage();
+    s.setTitle("Graphique zone " + z.get_nom());
+    s.setScene(new Scene(chart, 750, 450));
+    s.show();
+}
 
     @Override//redefinission de start
     public void start(Stage primaryStage) {
@@ -52,7 +174,8 @@ public class InterfaceFerme extends Application {
 
         console = new TextArea();
         console.setEditable(false);
-        console.setPrefRowCount(8);
+        //console.setPrefRowCount(8);
+        console.setPrefRowCount(6);
         console.setStyle("-fx-font-family: monospace;");
         redirigerConsole();//creeation de la console
 
@@ -447,9 +570,12 @@ public class InterfaceFerme extends Application {
         comboCapteurs = new ComboBox<>();
         comboCapteurs.setPrefWidth(260);
 
-        ComboBox<String> typeCapteur = new ComboBox<>(FXCollections.observableArrayList(
+        // ----- Malak
+        /*ComboBox<String> typeCapteur = new ComboBox<>(FXCollections.observableArrayList(
                 "Biometrique", "Environnemental", "Sol", "Eau", "GPS"));
-        typeCapteur.getSelectionModel().selectFirst();
+        typeCapteur.getSelectionModel().selectFirst();*/
+        typeCapteur = new ComboBox<>();
+        typeCapteur.setPrefWidth(160);
 
         Button creerCapteur = new Button("Creer et rattacher le capteur");
         creerCapteur.setOnAction(e -> {
@@ -468,7 +594,30 @@ public class InterfaceFerme extends Application {
             info("Capteur " + typeCapteur.getValue() + " cree et rattache.");
         });
 
-        comboZonesCapteur.setOnAction(e -> rafraichirCapteurs());
+        //----- Malak
+        //comboZonesCapteur.setOnAction(e -> rafraichirCapteurs());
+        comboZonesCapteur.setOnAction(e -> {
+            rafraichirCapteurs();
+            // Mettre à jour la liste des types selon SpecifiqueCapteurs de la zone
+           // Rafraîchir aussi la liste des types de capteurs
+        Zone_geographique zCap = zoneParNom(comboZonesCapteur);
+        if (typeCapteur != null) {
+            typeCapteur.getItems().clear();
+            if (zCap != null && zCap.getSpecifiqueCapteurs() != null) {
+                for (Type_Capteurs tc2 : zCap.getSpecifiqueCapteurs()) {
+                    switch (tc2) {
+                        case BIOMETRIQUE:   typeCapteur.getItems().add("Biometrique"); break;
+                        case ENVIRONMENTAL: typeCapteur.getItems().add("Environnemental"); break;
+                        case SOL:           typeCapteur.getItems().add("Sol"); break;
+                        case EAU:           typeCapteur.getItems().add("Eau"); break;
+                        case GPS:           typeCapteur.getItems().add("GPS"); break;
+                    }
+                }
+                if (!typeCapteur.getItems().isEmpty())
+                    typeCapteur.getSelectionModel().selectFirst();
+            }
+        }
+        });
 
         // --- Capteur numerique : seuils + valeur ---
         ComboBox<TypeMesure> mesure = new ComboBox<>(
@@ -535,6 +684,18 @@ public class InterfaceFerme extends Application {
                 erreur("Le capteur choisi est non actif pour le moment, vous ne pouvez pas ajouter de valeurs");
             }
         });
+        // ----MAlak
+        Button chargerReleves = new Button("Charger relevés depuis fichier...");
+        chargerReleves.setOnAction(e -> {
+            FileChooser fc = new FileChooser();
+            fc.setTitle("Fichier de relevés");
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers texte", "*.txt"));
+            File f = fc.showOpenDialog(stagePrincipal);
+            if (f == null) return;
+            int n = new Chargeur_releves(ferme).charger_depuis_fichier(f.getAbsolutePath());
+            rafraichirTout();
+            info(n + " relevé(s) chargé(s).");
+        });
 
         // --- Releves ---
         Button listeBtn = new Button("Afficher les releves (console)");
@@ -542,6 +703,29 @@ public class InterfaceFerme extends Application {
             capteur c = capteurSelectionne();
             if (c == null) { erreur("Selectionnez un capteur."); return; }
             console.appendText(c.DisplayListReleve() + "\n");
+        });
+
+        //--- Malak 
+        /*Button graphBtn = new Button("Graphique des relevés");
+        graphBtn.setOnAction(e -> {
+            capteur c = capteurSelectionne();
+            if (c == null) { erreur("Selectionnez un capteur."); return; }
+            if (!(c instanceof capteur_num)) { erreur("Graphique disponible uniquement pour capteurs numeriques."); return; }
+            afficherGraphique((capteur_num) c);
+        });*/
+        Button graphCapteurBtn = new Button("📈 Graphique - ce capteur");
+        graphCapteurBtn.setOnAction(e -> {
+            capteur c = capteurSelectionne();
+            if (c == null) { erreur("Selectionnez un capteur."); return; }
+            if (!(c instanceof capteur_num)) { erreur("Graphique uniquement pour capteurs numeriques."); return; }
+            afficherGraphiqueCapteur((capteur_num) c);
+        });
+
+        Button graphZoneBtn = new Button("📊 Graphique - toute la zone");
+        graphZoneBtn.setOnAction(e -> {
+            Zone_geographique z = zoneParNom(comboZonesCapteur);
+            if (z == null) { erreur("Selectionnez une zone."); return; }
+            afficherGraphiqueZone(z);
         });
 
         DatePicker d1 = new DatePicker();
@@ -574,12 +758,24 @@ public class InterfaceFerme extends Application {
                 new Separator(),
                 titreSection("Capteur GPS : position"),
                 new HBox(8, lon, lat, gpsBtn),
+                /** MALAk */
+                new Separator(),
+                titreSection("Chargement automatique"),
+                new HBox(8, chargerReleves),
+                // ---MALAK
                 new Separator(),
                 titreSection("Releves"),
+                //----- Malak
                 new HBox(8, listeBtn),
+                //new HBox(8, listeBtn, graphBtn),
+                new HBox(8, graphCapteurBtn, graphZoneBtn),
                 new HBox(8, new Label("Du"), d1, new Label("au"), d2, filtreBtn));
+        //box.setPadding(new Insets(10));
+        //return box;
         box.setPadding(new Insets(10));
-        return box;
+        ScrollPane scroll = new ScrollPane(box);
+        scroll.setFitToWidth(true);
+        return scroll;
     }
 
     private capteur capteurSelectionne() {
@@ -687,6 +883,8 @@ public class InterfaceFerme extends Application {
                 titreSection("Liste des alertes"),
                 listeAlertes,
                 new HBox(8, acquitter, supprimer));
+                listeAlertes.setPrefHeight(300);
+                listeAlertes.setMinHeight(200);
         VBox.setVgrow(listeAlertes, Priority.ALWAYS);
         box.setPadding(new Insets(10));
         return box;
@@ -713,6 +911,25 @@ public class InterfaceFerme extends Application {
         remplirA(comboZonesAquacole, ferme.get_liste_de_zones_aquacole());
         remplir(comboZonesCapteur, ferme.get_liste_de_zones());
         rafraichirAlertes();
+
+        //---- Malak
+        Zone_geographique zCap = zoneParNom(comboZonesCapteur);
+    if (typeCapteur != null) {
+        typeCapteur.getItems().clear();
+        if (zCap != null && zCap.getSpecifiqueCapteurs() != null) {
+            for (Type_Capteurs tc2 : zCap.getSpecifiqueCapteurs()) {
+                switch (tc2) {
+                    case BIOMETRIQUE:   typeCapteur.getItems().add("Biometrique"); break;
+                    case ENVIRONMENTAL: typeCapteur.getItems().add("Environnemental"); break;
+                    case SOL:           typeCapteur.getItems().add("Sol"); break;
+                    case EAU:           typeCapteur.getItems().add("Eau"); break;
+                    case GPS:           typeCapteur.getItems().add("GPS"); break;
+                }
+            }
+            if (!typeCapteur.getItems().isEmpty())
+                typeCapteur.getSelectionModel().selectFirst();
+        }
+    }
     }
 
     private void remplir(ComboBox<String> c, List<Zone_geographique> zs) {

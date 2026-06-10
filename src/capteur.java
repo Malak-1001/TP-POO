@@ -161,5 +161,12 @@ public abstract class capteur implements interface_activation {
         return S.toString();
     }
 
+    /**
+     * Retourne la zone du capteur
+     */
+    public Zone_geographique getZone() {
+        return zone;
+    }
+
 
 }

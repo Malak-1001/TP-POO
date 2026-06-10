@@ -11,7 +11,8 @@ public class capteur_eau extends capteur_num{
         super.type = Type_Capteurs.EAU;
         super.Unites = List.of(
             TypeMesure.TEMPERATURE, 
-            TypeMesure.OXYGENE
+            TypeMesure.OXYGENE,
+            TypeMesure.PH
         );
         
     }

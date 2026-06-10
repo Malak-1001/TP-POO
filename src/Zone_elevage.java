@@ -35,6 +35,9 @@ public Zone_elevage( String nom, type_elevage type,Limite_geographique limites,F
         }
         ferme.ajouter_zone(this);
         ferme.ajouter_zone_elevage(this);
+        super.SpecifiqueCapteurs = List.of(
+            Type_Capteurs.GPS, 
+            Type_Capteurs.BIOMETRIQUE);
     }
   //ajouter un animal a la zone   
 public void affecter_animal(Animeaux animal){
