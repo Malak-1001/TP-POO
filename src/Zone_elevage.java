@@ -11,9 +11,8 @@ private type_elevage type;//volail ou ruminant
 private type_production rendement;//lait ou oeuf
 //getter de luniter de mesure de la production 
 public TypeMesure get_unit(){return unite;}
-//fonction de l'interface_activation
-public void activation(){this.active = status_zone.ACTIF;}
-public void suspension(){this.active = status_zone.SUSPENDU;}
+
+
 //constructeur avec nom et type delevage
 public Zone_elevage( String nom, type_elevage type,Limite_geographique limites,Ferme ferme) {
       
@@ -66,18 +65,68 @@ public void enregistrer_rendement(float val){
 }
 // methode pour le test
 public void afficher_info(){
-System.out.println(nom);
-System.out.println(active);
-System.out.println("nombre entites : ");
-System.out.println(+list_animeaux.size());
+System.out.println("nom:"+nom);
+System.out.println("id="+id);
+System.out.println("etat:"+active);
+System.out.println("nombre entites : "+list_animeaux.size());
+
 }
 public void ajouter_programme_alimentaire(programme_alimentaire p){
 PA.add(p);
+
+}
+public void afficher_animeaux(){
+for ( Animeaux a : list_animeaux) {
+            a.afficher_animal();
+        }
 
 }
 public void ajouter_programme_alimentaire(double quantite,String type_aliment){
 programme_alimentaire p = new programme_alimentaire( quantite,type_aliment);
 PA.add(p);
 
+}
+public void afficher_rendement(){
+System.out.println("Type de production : " + rendement);
+    for (int i = 0; i < rendement_production.size(); i++) {
+        System.out.println("Rendemet  " + (i+1) + " : " + rendement_production.get(i) + " " + unite);
+    }
+
+}
+public void afficher_programme_alimentaire(){
+for ( programme_alimentaire p : PA) {
+     int i=1;
+     System.out.println("programme"+i+":");
+     p.info_program();   
+     i++;
+    }
+
+}
+public List<Animeaux> get_list_animeaux() { return list_animeaux; }
+
+
+public void afficher_rapport_sanitaire() {
+    int sain = 0, malade = 0, quarantaine = 0;
+
+    for (Animeaux a : list_animeaux) {
+        sante etat = a.get_etat_de_sante();
+        if (etat == null) continue;
+        switch (etat) {
+            case SAIN:       sain++;       break;
+            case MALADE: malade++; break;
+            case QUARANTAINE:  quarantaine++;  break;
+            
+        
+        }
+    }  
+    System.out.println("Nombre animeaux sain:"+sain);
+    System.out.println("Nombre animeaux malade:"+malade);
+    System.out.println("Nombre animeaux quarantaine:"+quarantaine);
+    
+    
+    
+    
+    
+    
 }
 }
