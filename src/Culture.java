@@ -42,10 +42,11 @@ public void afficher_info() {
     System.out.println("Date plantation : " + date_de_plantation);
     System.out.println("Date récolte : " + date_de_recolte);
     System.out.println("Stade : " + stade_de_croissance);
-    System.out.println("Exigences : " + EP);
+    System.out.println("Exigences : " + EP.affiche_ex());
+    
    
 }
-//gettters
+//getters
 public String getnomcult(){return nomcult;}
 public Croissance getStade(){return stade_de_croissance; }
 public Famille_cult getType(){return type;}
