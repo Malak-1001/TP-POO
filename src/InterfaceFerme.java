@@ -101,6 +101,94 @@ public class InterfaceFerme extends Application {
         s.show();
     }*/
 
+    private Node ongletTableauBord() {
+        ComboBox<String> comboZone = new ComboBox<>();
+        comboZone.setPrefWidth(260);
+        comboZone.setPromptText("Choisir une zone...");
+
+        VBox panneauIndicateurs = new VBox(10);
+        panneauIndicateurs.setPadding(new Insets(10));
+
+        Button rafraichirBtn = new Button("Afficher le tableau de bord");
+        rafraichirBtn.setOnAction(e -> {
+            Zone_geographique z = ferme.chercher_zone(comboZone.getValue());
+            if (z == null) { erreur("Choisissez une zone."); return; }
+            panneauIndicateurs.getChildren().clear();
+
+            for (capteur cap : z.getListCapteurs()) {
+                if (!(cap instanceof capteur_num)) continue;
+                capteur_num cn = (capteur_num) cap;
+
+                // Titre du capteur
+                Label titreCap = new Label("Capteur " + cn.getId() + " — " + cn.getType() + " (" + cn.getStatut() + ")");
+                titreCap.setFont(Font.font("System", FontWeight.BOLD, 13));
+                panneauIndicateurs.getChildren().add(titreCap);
+
+                // Dernier relevé de chaque mesure
+                List<Releve> releves = cn.getListReleve();
+                if (releves.isEmpty()) {
+                    panneauIndicateurs.getChildren().add(new Label("   Aucun relevé."));
+                    continue;
+                }
+
+                // On cherche le dernier relevé par TypeMesure
+                java.util.Map<TypeMesure, releve_num> derniers = new java.util.LinkedHashMap<>();
+                for (Releve r : releves) {
+                    if (r instanceof releve_num) {
+                        releve_num rn = (releve_num) r;
+                        derniers.put(rn.getUnite(), rn);
+                    }
+                }
+
+                for (java.util.Map.Entry<TypeMesure, releve_num> entry : derniers.entrySet()) {
+                    releve_num rn = entry.getValue();
+                    gravite g = rn.gravity;
+
+                    // Couleur selon gravité
+                    String couleur;
+                    String symbole;
+                    if (g == gravite.CRITIQUE) {
+                        couleur = "#c0392b"; symbole = "🔴";
+                    } else if (g == gravite.AVERTISSEMENT) {
+                        couleur = "#e67e22"; symbole = "🟠";
+                    } else {
+                        couleur = "#1a7f37"; symbole = "🟢";
+                    }
+
+                    Label indicateur = new Label(
+                        symbole + "  " + entry.getKey().name()
+                        + " : " + rn.getVal() + " " + entry.getKey().getUnite()
+                        + "   [" + g.name() + "]"
+                        + "   " + rn.date
+                    );
+                    indicateur.setStyle("-fx-text-fill: " + couleur + "; -fx-font-size: 13px;");
+                    panneauIndicateurs.getChildren().add(indicateur);
+                }
+
+                panneauIndicateurs.getChildren().add(new Separator());
+            }
+
+            if (panneauIndicateurs.getChildren().isEmpty()) {
+                panneauIndicateurs.getChildren().add(new Label("Aucun capteur numérique dans cette zone."));
+            }
+        });
+
+        // Rafraîchir la combo quand on entre dans l'onglet
+        comboZone.setOnMouseClicked(e -> remplir(comboZone, ferme.get_liste_de_zones()));
+
+        ScrollPane scroll = new ScrollPane(panneauIndicateurs);
+        scroll.setFitToWidth(true);
+
+        VBox box = new VBox(10,
+                titreSection("Tableau de bord — derniers relevés par zone"),
+                new HBox(8, new Label("Zone"), comboZone, rafraichirBtn),
+                new Separator(),
+                scroll);
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+        box.setPadding(new Insets(10));
+        return box;
+    }
+
     // Graphique pour un seul capteur — une série par TypeMesure
 private void afficherGraphiqueCapteur(capteur_num c) {
     NumberAxis xAxis = new NumberAxis();
@@ -187,7 +275,8 @@ private void afficherGraphiqueZone(Zone_geographique z) {
                 new Tab("Elevage", ongletElevage()),
                 new Tab("Aquacole", ongletAquacole()),
                 new Tab("Capteurs & Releves", ongletCapteurs()),
-                new Tab("Alertes", ongletAlertes()));//on remplit les ongle
+                new Tab("Alertes", ongletAlertes()),//on remplit les onglets
+                new Tab("Tableau de bord", ongletTableauBord()));
         onglets.getSelectionModel().selectedItemProperty()
                 .addListener((o, a, b) -> rafraichirTout());//listeneur changement longlet
 
@@ -620,9 +709,10 @@ private void afficherGraphiqueZone(Zone_geographique z) {
         });
 
         // --- Capteur numerique : seuils + valeur ---
-        ComboBox<TypeMesure> mesure = new ComboBox<>(
+        /*ComboBox<TypeMesure> mesure = new ComboBox<>(
                 FXCollections.observableArrayList(TypeMesure.values()));
-        mesure.getSelectionModel().selectFirst();
+        mesure.getSelectionModel().selectFirst();*/
+        ComboBox<TypeMesure> mesure = new ComboBox<>();
         TextField s1 = new TextField(); s1.setPromptText("Min");
         TextField s2 = new TextField(); s2.setPromptText("Min avert.");
         TextField s3 = new TextField(); s3.setPromptText("Min critique");
@@ -705,6 +795,34 @@ private void afficherGraphiqueZone(Zone_geographique z) {
             console.appendText(c.DisplayListReleve() + "\n");
         });
 
+        // --- Statut du capteur ---
+        Button activerCap = new Button("Activer");
+        activerCap.setOnAction(e -> {
+            capteur c = capteurSelectionne();
+            if (c == null) { erreur("Selectionnez un capteur."); return; }
+            c.activation();
+            rafraichirCapteurs();
+            info("Capteur activé.");
+        });
+
+        Button suspendreCap = new Button("Suspendre");
+        suspendreCap.setOnAction(e -> {
+            capteur c = capteurSelectionne();
+            if (c == null) { erreur("Selectionnez un capteur."); return; }
+            c.suspension();
+            rafraichirCapteurs();
+            info("Capteur suspendu.");
+        });
+
+        Button defaillantCap = new Button("Défaillant");
+        defaillantCap.setOnAction(e -> {
+            capteur c = capteurSelectionne();
+            if (c == null) { erreur("Selectionnez un capteur."); return; }
+            c.Defaillant();
+            rafraichirCapteurs();
+            info("Capteur marqué défaillant.");
+        });
+
         //--- Malak 
         /*Button graphBtn = new Button("Graphique des relevés");
         graphBtn.setOnAction(e -> {
@@ -745,7 +863,7 @@ private void afficherGraphiqueZone(Zone_geographique z) {
             }
         });
 
-        VBox box = new VBox(10,
+        /*VBox box = new VBox(10,
                 titreSection("Creer un capteur"),
                 new HBox(8, new Label("Zone"), comboZonesCapteur,
                         new Label("Type"), typeCapteur, creerCapteur),
@@ -759,7 +877,7 @@ private void afficherGraphiqueZone(Zone_geographique z) {
                 titreSection("Capteur GPS : position"),
                 new HBox(8, lon, lat, gpsBtn),
                 /** MALAk */
-                new Separator(),
+                /*new Separator(),
                 titreSection("Chargement automatique"),
                 new HBox(8, chargerReleves),
                 // ---MALAK
@@ -769,7 +887,62 @@ private void afficherGraphiqueZone(Zone_geographique z) {
                 new HBox(8, listeBtn),
                 //new HBox(8, listeBtn, graphBtn),
                 new HBox(8, graphCapteurBtn, graphZoneBtn),
-                new HBox(8, new Label("Du"), d1, new Label("au"), d2, filtreBtn));
+                new HBox(8, new Label("Du"), d1, new Label("au"), d2, filtreBtn));*/
+                // Section seuils — cachée par défaut, visible seulement pour capteur_num
+        VBox sectionSeuils = new VBox(8,
+                titreSection("Capteur numerique : seuils"),
+                new HBox(8, new Label("Mesure"), mesure, s1, s2, s3, s4, seuilsBtn),
+                titreSection("Capteur numerique : nouveau releve"),
+                new HBox(8, valeur, valBtn));
+        sectionSeuils.setVisible(false);
+        sectionSeuils.setManaged(false);
+
+        // Section GPS — cachée par défaut, visible seulement pour capteur_gps
+        VBox sectionGPS = new VBox(8,
+                titreSection("Capteur GPS : position"),
+                new HBox(8, lon, lat, gpsBtn));
+        sectionGPS.setVisible(false);
+        sectionGPS.setManaged(false);
+
+// Listener sur comboCapteurs : met à jour les sections et la liste de mesures
+comboCapteurs.setOnAction(e -> {
+    capteur c = capteurSelectionne();
+    boolean estNum = c instanceof capteur_num;
+    boolean estGps = c instanceof capteur_gps;
+
+    sectionSeuils.setVisible(estNum);
+    sectionSeuils.setManaged(estNum);
+    sectionGPS.setVisible(estGps);
+    sectionGPS.setManaged(estGps);
+
+    mesure.getItems().clear();
+    if (estNum) {
+        List<TypeMesure> unites = ((capteur_num) c).getUnites();
+        if (unites != null) {
+            mesure.getItems().addAll(unites);
+        }
+        if (!mesure.getItems().isEmpty())
+            mesure.getSelectionModel().selectFirst();
+    }
+});
+
+VBox box = new VBox(10,
+        titreSection("Creer un capteur"),
+        new HBox(8, new Label("Zone"), comboZonesCapteur,
+                new Label("Type"), typeCapteur, creerCapteur),
+        new HBox(8, new Label("Capteur"), comboCapteurs),
+        new HBox(8, new Label("Statut capteur :"), activerCap, suspendreCap, defaillantCap),
+        new Separator(),
+        sectionSeuils,
+        sectionGPS,
+        new Separator(),
+        titreSection("Chargement automatique"),
+        new HBox(8, chargerReleves),
+        new Separator(),
+        titreSection("Releves"),
+        new HBox(8, listeBtn),
+        new HBox(8, graphCapteurBtn, graphZoneBtn),
+        new HBox(8, new Label("Du"), d1, new Label("au"), d2, filtreBtn));
         //box.setPadding(new Insets(10));
         //return box;
         box.setPadding(new Insets(10));

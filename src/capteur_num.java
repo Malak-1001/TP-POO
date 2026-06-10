@@ -24,6 +24,15 @@ public abstract class capteur_num extends capteur{
     }
 
     /**
+     * Retourne les unites liées au capteur numérique
+     * @param plage
+     * @param m
+     */
+    public List<TypeMesure> getUnites(){
+        return Unites;
+    }
+
+    /**
      * Constructeur de la classe capteur numérique avec une zone géographique et le statut du capteur
      * @param z
      * @param s
@@ -39,16 +48,7 @@ public abstract class capteur_num extends capteur{
      * @param m
      * @return
      */
-    public Object[] getVal ;
-
-    /**
-     * Retourne les unites liées au capteur numérique
-     * @param plage
-     * @param m
-     */
-    public List<TypeMesure> getUnites(){
-        return Unites;
-    }
+    //public Object[] getVal ;
 
     
    /**
