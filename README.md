@@ -8,13 +8,9 @@ Le projet propose deux modes d'utilisation :
 - une **interface graphique JavaFX** (`InterfaceFerme`) ;
 - des **programmes de test en console** (`test.java`, `App.java`).
 
-## Version / date
-
-Version de travail, novembre 2026.
-
 ## Auteurs
-
-À compléter (noms des membres du projet).
+- Malak Yamina L.
+- Lina B.
 
 ---
 
@@ -207,13 +203,9 @@ The project can be used in two ways:
 - a **JavaFX graphical interface** (`InterfaceFerme`);
 - **console test programs** (`test.java`, `App.java`).
 
-## Version / date
-
-Work in progress, November 2026.
-
 ## Authors
-
-To be filled in (project members' names).
+- Malak Yamina L.
+- Lina B.
 
 ---
 
